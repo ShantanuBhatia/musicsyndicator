@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MSMS.Server.Helpers;
 using MSMS.Server.Interfaces;
 using MSMS.Server.Mappers;
 
@@ -9,9 +10,12 @@ namespace MSMS.Server.Controllers
     public class ArtistController : ControllerBase
     {
         private readonly IArtistRepository _artistRepo;
-        public ArtistController(IArtistRepository artistrepo)
+        private readonly SpotifyClientBuilder _spotifyClientBuilder;
+
+        public ArtistController(IArtistRepository artistrepo, SpotifyClientBuilder spotifyClientBuilder)
         {
             _artistRepo = artistrepo;
+            _spotifyClientBuilder = spotifyClientBuilder;
         }
 
         [HttpGet]
