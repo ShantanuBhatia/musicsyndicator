@@ -39,7 +39,7 @@ const CreateNewList = ({ user }) => {
             };
             console.log(JSON.stringify(submitdata));
             await artistListApi.create(submitdata);
-            alert("List created!")
+            navigate("/");
         }
         catch (err) {
             setError('Failed to create artist list. Please try again.');
