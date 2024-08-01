@@ -1,16 +1,23 @@
 import { Link } from 'react-router-dom';
 
-const Home = ({ user }) => {
+const Home = ({ user, logoutCallback }) => {
+
+    const handleLogin = () => {
+        window.location.href = 'https://localhost:7183/api/auth/login';
+    };
+
+
     return (
         <div>
             <h1>Home</h1>
-            {user ? (
+            {user?.isAuthenticated ? (
                 <div>
-                    <p>Welcome, {user.username}!</p>
+                    <p>Welcome, {user?.name}!</p>
                     <Link to="/search">Go to Search</Link>
+                    <button onClick={logoutCallback}>Log Out</button>
                 </div>
             ) : (
-                <a href="/api/auth/login">Log in with Spotify</a>
+                    <button onClick={handleLogin}>Log in with Spotify</button>
             )}
         </div>
     );

@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SpotifyAPI.Web;
+using System.Security.Claims;
 
 namespace MSMS.Server.Controllers
 {
@@ -15,21 +17,22 @@ namespace MSMS.Server.Controllers
             return Challenge(new AuthenticationProperties { RedirectUri = "/" }, "Spotify");
         }
 
-        [HttpGet("logout")]
+        [HttpPost("logout")]
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync();
-            return Redirect("/");
+            return Ok(new { message = "Logged out successfully" });
         }
 
         [HttpGet("user")]
-        [Authorize]
-        public async Task<IActionResult> GetUser()
+        public IActionResult GetUser()
         {
-            var accessToken = await HttpContext.GetTokenAsync("access_token");
-            var spotify = new SpotifyClient(accessToken);
-            var user = await spotify.UserProfile.Current();
-            return Ok(new { Username = user.DisplayName });
+            if (User.Identity.IsAuthenticated)
+            {
+                var name = User.FindFirst(ClaimTypes.Name)?.Value;
+                return Ok(new { isAuthenticated = true, name });
+            }
+            return Ok(new { isAuthenticated = false });
         }
     }
 }

@@ -35,7 +35,7 @@ const Search = ({ user }) => {
             </form>
             <ul>
                 {results.map((artist) => (
-                    <li key={artist.id}>{artist.name}</li>
+                    <li key={artist.id}>{JSON.stringify(artist)}</li>
                 ))}
             </ul>
         </div>

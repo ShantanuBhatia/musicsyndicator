@@ -48,7 +48,7 @@ export default defineConfig({
                 secure: false
             },
             '/api': {
-                target,
+                target: 'https://localhost:7183',
                 secure: false
             }
         },

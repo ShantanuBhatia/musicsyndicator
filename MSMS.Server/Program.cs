@@ -39,7 +39,8 @@ builder.Services.AddScoped<IArtistRepository, ArtistRepository>();
 // spotify auth stuff 
 builder.Services.AddAuthentication(options =>
 {
-    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = SpotifyAuthenticationDefaults.AuthenticationScheme;
 })
 .AddCookie()
@@ -47,15 +48,28 @@ builder.Services.AddAuthentication(options =>
 {
     options.ClientId = builder.Configuration["Spotify:ClientId"];
     options.ClientSecret = builder.Configuration["Spotify:ClientSecret"];
-    options.CallbackPath = "/signin-spotify";
+    options.CallbackPath = "/signin-spotify-auth";
     options.SaveTokens = true;
-    options.Scope.Add("user-read-private");
-    options.Scope.Add("user-read-email");
+    //options.Scope.Add("user-read-private");
+    //options.Scope.Add("user-read-email");
+});
+
+// CORS for react app
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowSpecificOrigin",
+        builder => builder.WithOrigins("https://localhost:5173")
+                          .AllowAnyHeader()
+                          .AllowAnyMethod()
+                          .AllowCredentials());
 });
 
 
 
 var app = builder.Build();
+
+// Use CORS
+app.UseCors("AllowSpecificOrigin");
 
 app.UseDefaultFiles();
 
@@ -70,9 +84,9 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseAuthentication();
 
 app.MapControllers();
 
