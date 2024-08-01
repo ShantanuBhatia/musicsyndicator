@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using MSMS.Server.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication;
+using SpotifyAPI.Web;
 
 namespace MSMS.Server.Controllers
 {
@@ -41,7 +43,7 @@ namespace MSMS.Server.Controllers
         public async Task<IActionResult> GetAllForUser()
         {
             var spotifyUserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
+            await Console.Out.WriteLineAsync("Hot reload you absolute pile of Microsoft");
             if (string.IsNullOrEmpty(spotifyUserId))
             {
                 return Unauthorized("User ID not found in the authentication token.");
@@ -69,28 +71,36 @@ namespace MSMS.Server.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateArtistListDto ListCreationData)
         {
-            var spotifyUserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-            if (string.IsNullOrEmpty(spotifyUserId))
+            try
             {
-                return Unauthorized("User ID not found in the authentication token.");
+                
+                var accessToken = await HttpContext.GetTokenAsync("access_token");
+                var spotify = new SpotifyClient(accessToken);
+                var spotifyUserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+                if (string.IsNullOrEmpty(spotifyUserId))
+                {
+                    return Unauthorized("User ID not found in the authentication token.");
+                }
+
+                var ArtistListModel = await ListCreationData.ToArtistListFromCreateDto(_artistRepo, spotifyUserId, spotify);
+                Console.WriteLine("Writing the artist list goes here");
+                foreach (var a in ArtistListModel.Artists)
+                {
+                    Console.WriteLine($"Spotify key: {a.ArtistSpotifyKey}, artist name {a.ArtistDisplayName}");
+                }
+                await _artistListRepo.CreateAsync(ArtistListModel);
+                await Console.Out.WriteLineAsync("Latest version of code aaaa");
+                return Ok(ArtistListModel.ToArtistListDto());
+
             }
-
-            // DONE refactor creatartistlistdto to remove the user ID from the object body
-            // DONE modify the method call below to take two params - artist repo, and the user ID
-            // From there on out, the logic is identical
-            // let's try it!!!
-
-
-
-            var ArtistListModel = await ListCreationData.ToArtistListFromCreateDto(_artistRepo, spotifyUserId);
-            Console.WriteLine("Writing the artist list goes here");
-            foreach(var a in ArtistListModel.Artists)
+            catch (APIException ex)
             {
-                Console.WriteLine($"Spotify key: {a.ArtistSpotifyKey}, artist name {a.ArtistDisplayName}");
+                Console.WriteLine(ex.Message);
+                Console.WriteLine(ex.Response?.StatusCode);
+                return StatusCode(500, "Error occurred when processing your request");
             }
-            await _artistListRepo.CreateAsync(ArtistListModel);
-            return Ok(ArtistListModel);
+            
         }
     }
 }
