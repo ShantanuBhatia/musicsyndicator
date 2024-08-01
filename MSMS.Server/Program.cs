@@ -50,8 +50,10 @@ builder.Services.AddAuthentication(options =>
     options.ClientSecret = builder.Configuration["Spotify:ClientSecret"];
     options.CallbackPath = "/signin-spotify-auth";
     options.SaveTokens = true;
-    //options.Scope.Add("user-read-private");
-    //options.Scope.Add("user-read-email");
+    options.Scope.Add("user-read-private");
+    options.Scope.Add("user-read-email");
+    options.Scope.Add("playlist-modify-public");
+    options.Scope.Add("playlist-modify-private"); // I wonder why these are two different permissions?
 });
 
 // CORS for react app
