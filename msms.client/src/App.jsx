@@ -35,12 +35,19 @@ function App() {
 
     return (
         <Router>
-            <Navbar name={"MSMS"} />
+            <Navbar />
+            <div className="relative flex size-full min-h-screen flex-col bg-[#111813] dark group/design-root overflow-x-hidden "
+                style={{
+                    fontFamily: ["Plus Jakarta Sans", "Noto Sans", "sans-serif"]
+
+                }} >
+            
             <Routes>
                 <Route exact path="/" element={<Home user={user} logoutCallback={handleLogout} />} />
                 <Route path="/search" element={<Search user={user} />} />
                 <Route path="/create" element={<CreateNewList user={user} /> } />
-            </Routes>
+                </Routes>
+            </div>
         </Router>
     );
     
