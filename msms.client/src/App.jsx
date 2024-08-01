@@ -1,9 +1,24 @@
-//import { useEffect, useState } from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import './App.css';
 import Navbar from './components/Navbar';
 
 function App() {
+    const [user, setUser] = useState(null);
+
+    useEffect(() => {
+        fetchUser();
+    }, []);
+
+    const fetchUser = async () => {
+        try {
+            const response = await axios.get('/api/auth/user');
+            setUser(response.data);
+        } catch (error) {
+            console.error('Error fetching user:', error);
+        }
+    };
 
     return (
         <Router>

@@ -4,5 +4,6 @@
     {
         public string SpotifyPlaylistName { get; set; } = "defaultname";
         public int ArtistListId { get; set; }
+        public int UserId {  get; set; }
     }
 }

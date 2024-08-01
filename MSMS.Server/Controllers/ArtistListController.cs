@@ -3,6 +3,10 @@ using Microsoft.AspNetCore.Mvc;
 using MSMS.Server.Mappers;
 using MSMS.Server.Models;
 
+using MSMS.Server.Data;
+using Microsoft.EntityFrameworkCore;
+using MSMS.Server.Interfaces;
+
 namespace MSMS.Server.Controllers
 {
     [ApiController]
@@ -12,42 +16,46 @@ namespace MSMS.Server.Controllers
         private static readonly string[] TempArtists = ["Stray Kids", "RESCENE", "NewJeans", "LeSserafim"];
 
         private readonly ILogger<ArtistListController> _logger;
+        private readonly IArtistListRepository _artistListRepo;
+        private readonly IArtistRepository _artistRepo;
 
-        public ArtistListController(ILogger<ArtistListController> logger)
+        public ArtistListController(ILogger<ArtistListController> logger, ApplicationDBContext context, IArtistListRepository artistListRepo, IArtistRepository artistRepo)
         {
             _logger = logger;
+            _artistListRepo = artistListRepo;
+            _artistRepo = artistRepo;
+        }
+        
+        [HttpGet]
+        public async Task<IActionResult> GetAll()
+        {
+            var artistLists = await _artistListRepo.GetAllAsync();
+            var artistListDtos = artistLists.Select(al => al.ToArtistListDto());
+            return Ok(artistListDtos);
         }
 
         [HttpGet("{id:int}")]
-        public IActionResult GetArtistListById([FromRoute] int id)
+        public async Task<IActionResult> GetArtistListById([FromRoute] int id)
         {
-            if (id == 999)
+            //var artistList = await _context.ArtistLists.FindAsync(id);
+            var artistList = await _artistListRepo.GetByIDAsync(id);
+            if (artistList == null)
             {
                 return NotFound();
             }
-
-            List<Artist> artists = new List<Artist>();
-            for (int i = 0; i < TempArtists.Length; i++) 
-            { 
-                artists.Add(new Artist { ArtistDisplayName = TempArtists[i], ArtistId=i+200});
-            }
-            ArtistList returnObject = new ArtistList
-            {
-                ArtistListName = "Example Artist List Number " + id.ToString(),
-                Artists = artists.Select(x => x.ArtistId).ToList<int>(),
-                ArtistListId = Random.Shared.Next(-20, 55),
-                UserId = 42069
-            };
-            return Ok(returnObject);
-
+            return Ok(artistList.ToArtistListDto());
         }
 
         [HttpPost]
-        public IActionResult Create([FromBody] CreateArtistListDto ListCreationData)
+        public async Task<IActionResult> Create([FromBody] CreateArtistListDto ListCreationData)
         {
-            var ArtistListModel = ListCreationData.ToArtistListFromCreateDto();
+            var ArtistListModel = await ListCreationData.ToArtistListFromCreateDto(_artistRepo);
             Console.WriteLine("Writing the artist list goes here");
-
+            foreach(var a in ArtistListModel.Artists)
+            {
+                Console.WriteLine(a);
+            }
+            await _artistListRepo.CreateAsync(ArtistListModel);
             return Ok(ArtistListModel);
         }
     }
