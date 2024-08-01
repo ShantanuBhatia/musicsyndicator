@@ -8,7 +8,7 @@ namespace MSMS.Server.Mappers
 {
     public static class ArtistListMappers
     {
-        public static async Task<ArtistList> ToArtistListFromCreateDto(this CreateArtistListDto aldto, IArtistRepository artistRepo)
+        public static async Task<ArtistList> ToArtistListFromCreateDto(this CreateArtistListDto aldto, IArtistRepository artistRepo, string userSpotifyID)
         {
             async Task<List<Artist>> MapArtistIdsToArtistList(List<string> artistIds)
             {
@@ -34,6 +34,7 @@ namespace MSMS.Server.Mappers
                         // Don't need to manually deal with potential duplicates here
                         // Entity framework saves us from repeats
                         await artistRepo.CreateAsync(newArtist);
+                        thisArtist = newArtist;
                     }
 
 
@@ -46,7 +47,7 @@ namespace MSMS.Server.Mappers
             var artistList = new ArtistList
             {
                 ArtistListName = aldto.ArtistListName,
-                UserId = aldto.UserId,
+                UserId = userSpotifyID,
                 Artists = await MapArtistIdsToArtistList(aldto.ArtistIds)
             };
             return artistList;

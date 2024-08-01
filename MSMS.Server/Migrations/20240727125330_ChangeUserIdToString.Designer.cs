@@ -4,6 +4,7 @@ using MSMS.Server.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MSMS.Server.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    partial class ApplicationDBContextModelSnapshot : ModelSnapshot
+    [Migration("20240727125330_ChangeUserIdToString")]
+    partial class ChangeUserIdToString
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -81,26 +84,6 @@ namespace MSMS.Server.Migrations
                     b.HasKey("ArtistListId");
 
                     b.ToTable("ArtistLists");
-                });
-
-            modelBuilder.Entity("MSMS.Server.Models.SpotifyPlaylist", b =>
-                {
-                    b.Property<string>("SpotifyPlaylistId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("ArtistListId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("SpotifyPlaylistName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("SpotifyPlaylistId");
-
-                    b.ToTable("SpotifyLists");
                 });
 
             modelBuilder.Entity("ArtistArtistList", b =>

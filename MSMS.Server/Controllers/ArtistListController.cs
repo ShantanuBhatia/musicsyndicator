@@ -41,18 +41,16 @@ namespace MSMS.Server.Controllers
         public async Task<IActionResult> GetAllForUser()
         {
             var spotifyUserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            await Console.Out.WriteLineAsync("############HERE IS MY SPOTIFY ID: ");
-            await Console.Out.WriteLineAsync(spotifyUserId);
 
             if (string.IsNullOrEmpty(spotifyUserId))
             {
                 return Unauthorized("User ID not found in the authentication token.");
             }
             // Call the repository method to get all lists for the user
-            var artistLists = await _artistListRepo.GetAllForUserAsync(9);
-
+            var artistLists = await _artistListRepo.GetAllForUserAsync(spotifyUserId);
+            var allArtistListDtos = artistLists.Select(al => al.ToArtistListDto());
             // Return the list of artist lists
-            return Ok(artistLists);
+            return Ok(allArtistListDtos);
         }
 
 
@@ -71,11 +69,25 @@ namespace MSMS.Server.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateArtistListDto ListCreationData)
         {
-            var ArtistListModel = await ListCreationData.ToArtistListFromCreateDto(_artistRepo);
+            var spotifyUserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (string.IsNullOrEmpty(spotifyUserId))
+            {
+                return Unauthorized("User ID not found in the authentication token.");
+            }
+
+            // DONE refactor creatartistlistdto to remove the user ID from the object body
+            // DONE modify the method call below to take two params - artist repo, and the user ID
+            // From there on out, the logic is identical
+            // let's try it!!!
+
+
+
+            var ArtistListModel = await ListCreationData.ToArtistListFromCreateDto(_artistRepo, spotifyUserId);
             Console.WriteLine("Writing the artist list goes here");
             foreach(var a in ArtistListModel.Artists)
             {
-                Console.WriteLine(a);
+                Console.WriteLine($"Spotify key: {a.ArtistSpotifyKey}, artist name {a.ArtistDisplayName}");
             }
             await _artistListRepo.CreateAsync(ArtistListModel);
             return Ok(ArtistListModel);

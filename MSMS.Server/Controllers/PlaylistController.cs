@@ -29,7 +29,7 @@ namespace MSMS.Server.Controllers
 
             var testPlaylist = new SpotifyPlaylist
             {
-                SpotifyPlaylistId = PlaylistToFetch,
+                SpotifyPlaylistId = "lalalala",
                 SpotifyPlaylistName = Playlists[PlaylistToFetch],
                 UserId= 1234
             };

@@ -17,6 +17,7 @@ namespace MSMS.Server.Data
 
         public DbSet<Artist> Artists { get; set; }
         public DbSet<ArtistList> ArtistLists { get; set; }
+        public DbSet<SpotifyPlaylist> SpotifyLists { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

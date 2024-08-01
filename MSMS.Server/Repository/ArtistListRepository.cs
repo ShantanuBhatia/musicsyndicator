@@ -18,7 +18,7 @@ namespace MSMS.Server.Repository
             return await _context.ArtistLists.Include(a => a.Artists).ToListAsync();
         }
 
-        public async Task<List<ArtistList>> GetAllForUserAsync(int id)
+        public async Task<List<ArtistList>> GetAllForUserAsync(string id)
         {
             return await _context.ArtistLists.Include(a => a.Artists).Where(a => a.UserId == id).ToListAsync();
         }
