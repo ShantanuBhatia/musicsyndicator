@@ -6,11 +6,14 @@ using MSMS.Server.Models;
 using MSMS.Server.Data;
 using Microsoft.EntityFrameworkCore;
 using MSMS.Server.Interfaces;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace MSMS.Server.Controllers
 {
     [ApiController]
     [Route("api/artistlists")]
+    [Authorize]
     public class ArtistListController : ControllerBase
     {
         private static readonly string[] TempArtists = ["Stray Kids", "RESCENE", "NewJeans", "LeSserafim"];
@@ -26,13 +29,32 @@ namespace MSMS.Server.Controllers
             _artistRepo = artistRepo;
         }
         
-        [HttpGet]
+        [HttpGet("api/artistlists/admin-all")]
         public async Task<IActionResult> GetAll()
         {
             var artistLists = await _artistListRepo.GetAllAsync();
             var artistListDtos = artistLists.Select(al => al.ToArtistListDto());
             return Ok(artistListDtos);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAllForUser()
+        {
+            var spotifyUserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            await Console.Out.WriteLineAsync("############HERE IS MY SPOTIFY ID: ");
+            await Console.Out.WriteLineAsync(spotifyUserId);
+
+            if (string.IsNullOrEmpty(spotifyUserId))
+            {
+                return Unauthorized("User ID not found in the authentication token.");
+            }
+            // Call the repository method to get all lists for the user
+            var artistLists = await _artistListRepo.GetAllForUserAsync(9);
+
+            // Return the list of artist lists
+            return Ok(artistLists);
+        }
+
 
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetArtistListById([FromRoute] int id)
