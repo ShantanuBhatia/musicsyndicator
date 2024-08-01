@@ -81,7 +81,7 @@ export const artistListApi = {
 export const playlistApi = {
     getById: async (id) => {
         try {
-            const response = await api.get(`/api/playlist/${id}`);
+            const response = await api.get(`/api/playlists/${id}`);
             return response.data;
         } catch (error) {
             throw handleApiError(error);
@@ -89,7 +89,7 @@ export const playlistApi = {
     },
     create: async (data) => {
         try {
-            const response = await api.post('/api/playlist', data);
+            const response = await api.post('/api/playlists/createplaylist', data);
             return response.data;
         } catch (error) {
             throw handleApiError(error);
