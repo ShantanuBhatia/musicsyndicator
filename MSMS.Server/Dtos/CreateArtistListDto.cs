@@ -1,6 +1,8 @@
-﻿namespace MSMS.Server.Dtos
+﻿namespace MSMS.Server.Models
 {
-    public class Class
+    public class CreateArtistListDto
     {
+        public int UserId { get; set; }
+        public string[] artists { get; set; }
     }
 }

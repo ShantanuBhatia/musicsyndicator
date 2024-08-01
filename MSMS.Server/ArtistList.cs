@@ -1,4 +1,4 @@
-﻿namespace MSMS.Server
+﻿namespace MSMS.Server.Models
 {
     public class ArtistList
     {

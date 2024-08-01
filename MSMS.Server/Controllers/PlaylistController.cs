@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MSMS.Server.Models;
 
 namespace MSMS.Server.Controllers
 {
