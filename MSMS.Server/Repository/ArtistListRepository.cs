@@ -15,12 +15,12 @@ namespace MSMS.Server.Repository
         }
         public async Task<List<ArtistList>> GetAllAsync()
         {
-            return await _context.ArtistLists.Include(a => a.Artists).ToListAsync();
+            return await _context.ArtistLists.Include(a => a.LinkedPlaylist).Include(a => a.Artists).ToListAsync();
         }
 
         public async Task<List<ArtistList>> GetAllForUserAsync(string id)
         {
-            return await _context.ArtistLists.Include(a => a.Artists).Where(a => a.UserId == id).ToListAsync();
+            return await _context.ArtistLists.Include(a => a.LinkedPlaylist).Include(a => a.Artists).Where(a => a.UserId == id).ToListAsync();
         }
         public async Task<ArtistList?> GetByIDAsync(int id)
         {
