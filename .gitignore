@@ -398,4 +398,4 @@ FodyWeavers.xsd
 *.sln.iml
 
 # IDK if you're supposed to commit appsettings or not but I'll keep it here for now 
-MSMS.Server/appsettings.json
+./MSMS.Server/appsettings.json
