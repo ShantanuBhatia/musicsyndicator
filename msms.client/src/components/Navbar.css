@@ -1,0 +1,32 @@
+nav {
+    padding: 10px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+
+}
+
+nav a {
+    color: #fff;
+    /*margin-right: 10px;*/
+    text-decoration: none;
+}
+nav ul {
+    padding:0 40;
+}
+nav ul li {
+    /* Puts the elements in a single line */
+    display: inline-flex;
+    align-items: center;
+}
+
+/*
+Top nav header sticky
+*/
+.hd1 {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background-color: rgba(143, 169, 152, 1.0);
+    padding: 0.2em;
+}

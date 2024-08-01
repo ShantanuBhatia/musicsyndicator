@@ -4,5 +4,6 @@
     {
         public int UserId { get; set; }
         public List<int> ArtistIds { get; set; } = [];
+        public string ArtistListName { get; set; }
     }
 }

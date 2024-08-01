@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using MSMS.Server.Mappers;
 using MSMS.Server.Models;
 
 namespace MSMS.Server.Controllers
@@ -33,12 +34,21 @@ namespace MSMS.Server.Controllers
             ArtistList returnObject = new ArtistList
             {
                 ArtistListName = "Example Artist List Number " + id.ToString(),
-                Artists = artists,
+                Artists = artists.Select(x => x.ArtistId).ToList<int>(),
                 ArtistListId = Random.Shared.Next(-20, 55),
                 UserId = 42069
             };
             return Ok(returnObject);
 
+        }
+
+        [HttpPost]
+        public IActionResult Create([FromBody] CreateArtistListDto ListCreationData)
+        {
+            var ArtistListModel = ListCreationData.ToArtistListFromCreateDto();
+            Console.WriteLine("Writing the artist list goes here");
+
+            return Ok(ArtistListModel);
         }
     }
 }

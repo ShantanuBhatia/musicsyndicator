@@ -1,10 +1,20 @@
-
-const NavBar = (props) => {
+import { Link } from 'react-router-dom';
+import './Navbar.css'
+const Navbar = (props) => {
     return (
-        <div>
-            <h1>temporary navbar for app called {props.name}</h1>
-            <p>The date today is {props.dateToday}</p>
-        </div>);
+        <header className="hd1">
+            <nav>
+                <ul>
+                    <li><b><Link to="/">{props.name}</Link></b></li>
+                </ul>
+                <ul>
+                    <li><Link to="/">{props.name}</Link></li>
+                    <li><Link to="/about">About</Link></li>
+                    <li><Link to="/login">Log in</Link></li>
+                </ul>
+            </nav>
+        </header>
+    )
 }
 
-export default NavBar;
+export default Navbar;
