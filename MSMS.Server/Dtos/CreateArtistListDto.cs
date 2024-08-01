@@ -3,6 +3,6 @@
     public class CreateArtistListDto
     {
         public int UserId { get; set; }
-        public string[] artists { get; set; }
+        public List<int> ArtistIds { get; set; } = [];
     }
 }
