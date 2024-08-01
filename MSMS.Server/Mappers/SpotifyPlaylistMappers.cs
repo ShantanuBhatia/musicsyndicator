@@ -5,13 +5,13 @@ namespace MSMS.Server.Mappers
 {
     public static class SpotifyPlaylistMappers
     {
-        public static SpotifyPlaylist ToSpotifyPlaylistFromCreateDto(this CreateSpotifyPlaylistDto spdto)
+        public static SpotifyPlaylist ToSpotifyPlaylistFromCreateDto(this CreateSpotifyPlaylistDto spdto, string userId)
         {
             return new SpotifyPlaylist
             {
                 ArtistListId = spdto.ArtistListId,
                 SpotifyPlaylistName = spdto.SpotifyPlaylistName,
-                UserId = spdto.UserId
+                UserId = userId
             };
         }
     }

@@ -1,9 +1,11 @@
-﻿namespace MSMS.Server.Dtos
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace MSMS.Server.Dtos
 {
     public class CreateSpotifyPlaylistDto
     {
-        public string SpotifyPlaylistName { get; set; } = "defaultname";
+        [Required]
         public int ArtistListId { get; set; }
-        public int UserId {  get; set; }
+        public string SpotifyPlaylistName { get; set; } = String.Empty;
     }
 }

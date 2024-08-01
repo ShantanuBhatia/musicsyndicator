@@ -31,7 +31,7 @@ namespace MSMS.Server.Controllers
             {
                 SpotifyPlaylistId = "lalalala",
                 SpotifyPlaylistName = Playlists[PlaylistToFetch],
-                UserId= 1234
+                UserId= "1234"
             };
 
             return new JsonResult(testPlaylist);

@@ -10,6 +10,8 @@ using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using SpotifyAPI.Web;
+using MSMS.Server.Dtos;
+using MSMS.Server.Helpers;
 
 namespace MSMS.Server.Controllers
 {
@@ -71,6 +73,11 @@ namespace MSMS.Server.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateArtistListDto ListCreationData)
         {
+            // TODO put an upper limit on the number of artists allowed per list
+            // something reasonable like uhh 10?
+
+            // TODO put an upper limit on number of lists per user
+            // something reasonable like uhh 10?
             try
             {
                 
@@ -101,6 +108,37 @@ namespace MSMS.Server.Controllers
                 return StatusCode(500, "Error occurred when processing your request");
             }
             
+        }
+
+        [HttpPost("createplaylist")]
+        public async Task<IActionResult> CreatePlaylistFromArtistList([FromBody]CreateSpotifyPlaylistDto playlistCreationDto)
+        {
+            var spotifyUserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var artistList = await _artistListRepo.GetByIDAsync(playlistCreationDto.ArtistListId);
+
+            await Console.Out.WriteLineAsync($"Fetched the artistlist called {artistList.ArtistListName}");
+            // I know that this error message is super vague, maybe even inaccurate
+            // But this particular code path can only come from someone tryna access other users' data
+            // In which case it would be standard practice to be as vague as possible
+            // And not give anything away
+            // TODO - protect against this malarkey by giving ArtistLists a non-sequential ID
+            if (artistList is null || spotifyUserId != artistList.UserId)
+            {
+                return BadRequest("An error occurred.");
+            }
+
+            if (string.IsNullOrEmpty(spotifyUserId))
+            {
+                return Unauthorized("User ID not found in the authentication token.");
+            }
+
+            var accessToken = await HttpContext.GetTokenAsync("access_token");
+            var spotify = new SpotifyClient(accessToken);
+
+            var tracklist = await SpotifyUtils.GetLatestSinglesArtistList(spotify, artistList.Artists[0].ArtistSpotifyKey, 12, artistList);
+
+
+            return Ok(tracklist);
         }
     }
 }

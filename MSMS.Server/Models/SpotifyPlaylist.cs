@@ -2,9 +2,10 @@
 {
     public class SpotifyPlaylist
     {
+        public string PlaylistKey {  get; set; }
         public string SpotifyPlaylistId { get; set; }
         public string SpotifyPlaylistName { get; set; } = "defaultname";
-        public int UserId { get; set;}
+        public string UserId { get; set;}
         public int ArtistListId { get; set; }
     }
 }
