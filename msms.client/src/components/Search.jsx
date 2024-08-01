@@ -1,14 +1,14 @@
 import { useState } from 'react';
 import axios from 'axios';
+import ArtistPreview from './ArtistPreview';
 
-const Search = ({ user }) => {
+
+const Search = ({ handleArtistClick, selectedArtists }) => {
     const [query, setQuery] = useState('');
     const [results, setResults] = useState([]);
 
     const handleSearch = async (e) => {
         e.preventDefault();
-        if (!user) return;
-
         try {
             const response = await axios.get(`/api/search/artists?query=${query}`);
             setResults(response.data);
@@ -17,13 +17,10 @@ const Search = ({ user }) => {
         }
     };
 
-    if (!user) {
-        return <p>Not logged in, sorry.</p>;
-    }
 
     return (
         <div>
-            <h1>Search Artists</h1>
+            <h3>Search Artists</h3>
             <form onSubmit={handleSearch}>
                 <input
                     type="text"
@@ -33,11 +30,11 @@ const Search = ({ user }) => {
                 />
                 <button type="submit">Search</button>
             </form>
-            <ul>
-                {results.map((artist) => (
-                    <li key={artist.id}>{JSON.stringify(artist)}</li>
+
+                {results && results.map((artist) => (
+                    <ArtistPreview key={artist.id} artist={artist} isSelected={selectedArtists.some(a => a.id === artist.id)} onClick={() => handleArtistClick(artist)} />
                 ))}
-            </ul>
+
         </div>
     );
 };

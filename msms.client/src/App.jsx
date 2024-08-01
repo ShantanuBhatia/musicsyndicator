@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 import './App.css';
 import Navbar from './components/Navbar';
 import Home from './components/Home';
 import Search from './components/Search';
+import CreateNewList from './components/CreateNewList';
 
 function App() {
     const [user, setUser] = useState(null);
@@ -38,6 +39,7 @@ function App() {
             <Routes>
                 <Route exact path="/" element={<Home user={user} logoutCallback={handleLogout} />} />
                 <Route path="/search" element={<Search user={user} />} />
+                <Route path="/create" element={<CreateNewList user={user} /> } />
             </Routes>
         </Router>
     );

@@ -4,9 +4,9 @@ const Navbar = (props) => {
     return (
         <header className="hd1">
             <nav>
-                    <Link to="/">{props.name}</Link>
-                    <Link to="/searchk">Search</Link>
-                    <Link to="/search">Search but again</Link>
+                <Link to="/">{props.name}</Link>
+                <Link to="/search">Search</Link>
+                <Link to="/create">Create New List</Link>
             </nav>
         </header>
     )

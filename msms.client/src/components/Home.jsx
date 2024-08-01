@@ -1,19 +1,33 @@
-import { Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { artistListApi } from '../services/apiService';
+
+import ArtistListList from './ArtistListList';
 
 const Home = ({ user, logoutCallback }) => {
+
+    const [artistLists, setArtistLists] = useState([]);
 
     const handleLogin = () => {
         window.location.href = 'https://localhost:7183/api/auth/login';
     };
 
+    useEffect(() => {
+        const fetchArtistLists = async () => {
+            if (user?.isAuthenticated) {
+                const myArtistLists = await artistListApi.getAll();
+                setArtistLists(myArtistLists);
+            }
+        }
+        fetchArtistLists();
+    }, [user?.isAuthenticated])
 
     return (
         <div>
-            <h1>Home</h1>
             {user?.isAuthenticated ? (
                 <div>
-                    <p>Welcome, {user?.name}!</p>
-                    <Link to="/search">Go to Search</Link>
+                    <h1>Welcome, {user?.name}!</h1>
+                    <h2>Your Artist Lists:</h2>
+                    {artistLists.length > 0 ? <ArtistListList artlistLists={artistLists} />: <></>}
                     <button onClick={logoutCallback}>Log Out</button>
                 </div>
             ) : (
