@@ -13,10 +13,23 @@ namespace MSMS.Server.Controllers
         [Authorize]
         public async Task<IActionResult> SearchArtists(string query)
         {
-            var accessToken = await HttpContext.GetTokenAsync("access_token");
-            var spotify = new SpotifyClient(accessToken);
-            var searchResponse = await spotify.Search.Item(new SearchRequest(SearchRequest.Types.Artist, query));
-            return Ok(searchResponse.Artists.Items);
+            try
+            {
+                var accessToken = await HttpContext.GetTokenAsync("access_token");
+                var spotify = new SpotifyClient(accessToken);
+                await Console.Out.WriteLineAsync("WILL THIS PRINT???");
+                await Console.Out.WriteLineAsync($"Access token is {accessToken}");
+                var searchResponse = await spotify.Search.Item(new SearchRequest(SearchRequest.Types.Artist, query));
+                return Ok(searchResponse.Artists.Items);
+            }
+            catch (APIException ex)
+            {
+                // Prints: invalid id
+                Console.WriteLine(ex.Message);
+                // Prints: BadRequest
+                Console.WriteLine(ex.Response?.StatusCode);
+                return StatusCode(500, "Error occurred");
+            }
         }
     }
 }
