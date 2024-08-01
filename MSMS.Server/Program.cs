@@ -7,6 +7,8 @@ using Microsoft.EntityFrameworkCore;
 using MSMS.Server.Data;
 using MSMS.Server.Interfaces;
 using MSMS.Server.Repository;
+using MSMS.Server.Helpers;
+using SpotifyAPI.Web;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,6 +37,9 @@ builder.Services.AddDbContext<ApplicationDBContext>(options =>
 builder.Services.AddScoped<IArtistListRepository, ArtistListRepository>();
 builder.Services.AddScoped<IArtistRepository, ArtistRepository>();
 builder.Services.AddScoped<IPlaylistRepository, PlaylistRepository>();
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddSingleton(SpotifyClientConfig.CreateDefault());
+builder.Services.AddScoped<SpotifyClientBuilder>();
 
 
 // spotify auth stuff 
@@ -44,7 +49,10 @@ builder.Services.AddAuthentication(options =>
     options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = SpotifyAuthenticationDefaults.AuthenticationScheme;
 })
-.AddCookie()
+.AddCookie(options =>
+{
+    options.ExpireTimeSpan = TimeSpan.FromMinutes(65);
+})
 .AddSpotify(options =>
 {
     options.ClientId = builder.Configuration["Spotify:ClientId"];
