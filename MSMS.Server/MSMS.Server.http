@@ -1,0 +1,6 @@
+@MSMS.Server_HostAddress = http://localhost:5128
+
+GET {{MSMS.Server_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
