@@ -24,11 +24,6 @@ namespace MSMS.Server.Controllers
         {
             try
             {
-
-                var expiresAt = await HttpContext.GetTokenAsync("expires_at");
-                await Console.Out.WriteLineAsync($"########## Token expires at {expiresAt}");
-                //var accessToken = await HttpContext.GetTokenAsync("access_token");
-                //var spotify = new SpotifyClient(accessToken);
                 var spotify = await _spotifyClientBuilder.BuildClient();
                 var searchResponse = await spotify.Search.Item(new SearchRequest(SearchRequest.Types.Artist, query));
                 
