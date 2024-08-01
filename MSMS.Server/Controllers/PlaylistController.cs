@@ -19,12 +19,14 @@ namespace MSMS.Server.Controllers
 
         private readonly IPlaylistRepository _playlistRepo;
         private readonly IArtistListRepository _artistListRepo;
+        private readonly SpotifyClientBuilder _spotifyClientBuilder;
 
-        public PlaylistController(IPlaylistRepository playlistRepository, IArtistListRepository artistListRepository)
+        public PlaylistController(IPlaylistRepository playlistRepository, IArtistListRepository artistListRepository, SpotifyClientBuilder spotifyClientBuilder)
         {
 
             _playlistRepo = playlistRepository;
             _artistListRepo = artistListRepository;
+            _spotifyClientBuilder = spotifyClientBuilder;
         }
         [HttpGet("{id}")]
         public async Task<IActionResult> GetPlaylistById([FromRoute] string id)
@@ -66,8 +68,7 @@ namespace MSMS.Server.Controllers
             }
 
 
-            var accessToken = await HttpContext.GetTokenAsync("access_token");
-            var spotify = new SpotifyClient(accessToken);
+            var spotify = await _spotifyClientBuilder.BuildClient();
 
             // Get all relevant tracks for 
             var tracklist = await SpotifyUtils.GetLatestSinglesArtistList(spotify, artistList.Artists[0].ArtistSpotifyKey, 12, artistList);

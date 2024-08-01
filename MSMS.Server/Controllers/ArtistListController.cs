@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using SpotifyAPI.Web;
+using MSMS.Server.Helpers;
 
 namespace MSMS.Server.Controllers
 {
@@ -19,29 +20,23 @@ namespace MSMS.Server.Controllers
         private readonly ILogger<ArtistListController> _logger;
         private readonly IArtistListRepository _artistListRepo;
         private readonly IArtistRepository _artistRepo;
+        private readonly SpotifyClientBuilder _spotifyClientBuilder;
 
-        public ArtistListController(ILogger<ArtistListController> logger, ApplicationDBContext context, IArtistListRepository artistListRepo, IArtistRepository artistRepo)
+        public ArtistListController(ILogger<ArtistListController> logger, ApplicationDBContext context, IArtistListRepository artistListRepo, IArtistRepository artistRepo, SpotifyClientBuilder spotifyClientBuilder)
         {
             _logger = logger;
             _artistListRepo = artistListRepo;
             _artistRepo = artistRepo;
+            _spotifyClientBuilder = spotifyClientBuilder;
         }
         
-        [HttpGet("api/artistlists/admin-all")]
-        public async Task<IActionResult> GetAll()
-        {
-            var artistLists = await _artistListRepo.GetAllAsync();
-            var artistListDtos = artistLists.Select(al => al.ToArtistListDto());
-            return Ok(artistListDtos);
-        }
-
         [HttpGet]
         public async Task<IActionResult> GetAllForUser()
         {
             var spotifyUserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (string.IsNullOrEmpty(spotifyUserId))
             {
-                return Unauthorized("User ID not found in the authentication token.");
+                return Unauthorized("User not found");
             }
             
             var artistLists = await _artistListRepo.GetAllForUserAsync(spotifyUserId);
@@ -72,9 +67,8 @@ namespace MSMS.Server.Controllers
             // something reasonable like uhh 10?
             try
             {
-                
-                var accessToken = await HttpContext.GetTokenAsync("access_token");
-                var spotify = new SpotifyClient(accessToken);
+
+                var spotify = await _spotifyClientBuilder.BuildClient();
                 var spotifyUserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
                 if (string.IsNullOrEmpty(spotifyUserId))
