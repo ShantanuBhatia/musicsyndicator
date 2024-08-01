@@ -34,6 +34,7 @@ builder.Services.AddDbContext<ApplicationDBContext>(options =>
 
 builder.Services.AddScoped<IArtistListRepository, ArtistListRepository>();
 builder.Services.AddScoped<IArtistRepository, ArtistRepository>();
+builder.Services.AddScoped<IPlaylistRepository, PlaylistRepository>();
 
 
 // spotify auth stuff 

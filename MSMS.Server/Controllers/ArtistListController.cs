@@ -109,7 +109,7 @@ namespace MSMS.Server.Controllers
             }
             
         }
-
+        /*
         [HttpPost("createplaylist")]
         public async Task<IActionResult> CreatePlaylistFromArtistList([FromBody]CreateSpotifyPlaylistDto playlistCreationDto)
         {
@@ -167,5 +167,6 @@ namespace MSMS.Server.Controllers
 
             
         }
+        */
     }
 }
