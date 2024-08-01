@@ -24,7 +24,7 @@ namespace MSMS.Server.Repository
         }
         public async Task<ArtistList?> GetByIDAsync(int id)
         {
-            return await _context.ArtistLists.Include(a => a.Artists).FirstOrDefaultAsync(a => a.ArtistListId == id);
+            return await _context.ArtistLists.Include(a =>a.LinkedPlaylist).Include(a => a.Artists).FirstOrDefaultAsync(a => a.ArtistListId == id);
 
         }
         public async Task<ArtistList> CreateAsync(ArtistList artistList)

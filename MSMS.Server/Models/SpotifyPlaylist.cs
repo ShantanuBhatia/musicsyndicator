@@ -7,5 +7,6 @@
         public string SpotifyPlaylistName { get; set; } = "defaultname";
         public string UserId { get; set;}
         public int ArtistListId { get; set; }
+        public ArtistList LinkedArtistList { get; set; }
     }
 }

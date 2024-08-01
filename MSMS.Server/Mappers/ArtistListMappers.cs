@@ -85,6 +85,7 @@ namespace MSMS.Server.Mappers
                 ArtistListId = artistList.ArtistListId,
                 ArtistListName = artistList.ArtistListName,
                 UserId = artistList.UserId,
+                playlistId = artistList.LinkedPlaylist?.SpotifyPlaylistId
             };
 
             var artistDtoList = artistList.Artists.Select(a => a.ToArtistDto()).ToList();
