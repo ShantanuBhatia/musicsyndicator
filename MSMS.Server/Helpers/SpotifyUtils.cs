@@ -49,11 +49,11 @@ namespace MSMS.Server.Helpers
                 {
                     if (albumTracks.Items.Any())
                     {
-                        trackIds.Add(albumTracks.Items.First().Name);
+                        trackIds.Add($"spotify:track:{albumTracks.Items.First().Id}");
                     }
                 } else
                 {
-                    trackIds.AddRange(albumTracks.Items.Select(track => track.Name));
+                    trackIds.AddRange(albumTracks.Items.Select(track => $"spotify:track:{track.Id}"));
                 }
                 
             }

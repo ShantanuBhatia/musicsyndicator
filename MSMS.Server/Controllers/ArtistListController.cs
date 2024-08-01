@@ -137,8 +137,35 @@ namespace MSMS.Server.Controllers
 
             var tracklist = await SpotifyUtils.GetLatestSinglesArtistList(spotify, artistList.Artists[0].ArtistSpotifyKey, 12, artistList);
 
+            // Now that we have a track list, let's try to create the actual playlist
+            try
+            {
+                var playlistCreationRequest = new PlaylistCreateRequest(playlistCreationDto.SpotifyPlaylistName)
+                {
+                    Public = false,
+                    Description = "Maintained by the Moderately Simple Music Syndication service"
+                };
 
-            return Ok(tracklist);
+                var playlist = await spotify.Playlists.Create(spotifyUserId, playlistCreationRequest);
+                
+                // Add tracks to the playlist
+                // Spotify API limits adding tracks to 100 per request, so we need to batch them
+                const int batchSize = 100;
+                for (int i = 0; i < tracklist.Count; i += batchSize)
+                {
+                    var batch = tracklist.GetRange(i, Math.Min(batchSize, tracklist.Count - i));
+                    await spotify.Playlists.AddItems(playlist.Id, new PlaylistAddItemsRequest(batch));
+                }
+
+                return Ok(playlist.Id);
+            }
+            catch(Exception ex)
+            {
+                await Console.Out.WriteLineAsync(ex.Message);
+                return BadRequest(new { Error = ex.Message });
+            }
+
+            
         }
     }
 }
