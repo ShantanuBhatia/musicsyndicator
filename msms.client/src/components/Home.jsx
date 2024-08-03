@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 import { artistListApi } from '../services/apiService';
 import ArtistListList from './ArtistListList';
 import heroBanner from "../assets/herobanner.jpg";
 
-const placeholderLineups = ["Pop Girlies?", "Sadboi Classics?", "The Big Three?"];
+const placeholderLineups = ["Pop Girlies?", "Sadboi Classics?", "The Big Three?", "BTS Member Solos?"];
 
 const Home = ({ user, logoutCallback }) => {
 
@@ -36,7 +37,7 @@ const Home = ({ user, logoutCallback }) => {
                 return prevIndex + 1;
             })
         };
-        setInterval(timer, 2000);
+        setInterval(timer, 2500);
 
         //cleanup function in order clear the interval timer
         //when the component unmounts
@@ -61,10 +62,10 @@ const Home = ({ user, logoutCallback }) => {
                                 <h1
                                     className="text-white text-4xl font-black leading-tight tracking-[-0.033em] @[480px]:text-5xl @[480px]:font-black @[480px]:leading-tight @[480px]:tracking-[-0.033em]"
                                 >
-                                    Never miss a beat again
+                                    <br/>Never miss a beat
                                 </h1>
                                 <h2 className="text-white text-sm font-normal leading-normal @[480px]:text-base @[480px]:font-normal @[480px]:leading-normal">
-                                    Curate lineups of your favourite artists - we&apos;ll keep you up to date when they drop new music
+                                    Curate lineups of your favourite artists - we&apos;ll keep you up to date with their latest drops
                                 </h2>
                             </div>
                             <label className="flex flex-col min-w-40 h-14 w-full max-w-[480px] @[480px]:h-16">
@@ -83,11 +84,13 @@ const Home = ({ user, logoutCallback }) => {
                                         onChange={(e) => setLineupName(e.target.value)}
                                     />
                                     <div className="flex items-center justify-center rounded-r-xl border-l-0 border border-[#3c5344] bg-[#1c2620] pr-[7px]">
-                                        <button
-                                            className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 px-4 @[480px]:h-12 @[480px]:px-5 bg-[#19cc58] text-[#111813] text-sm font-bold leading-normal tracking-[0.015em] @[480px]:text-base @[480px]:font-bold @[480px]:leading-normal @[480px]:tracking-[0.015em]"
-                                        >
-                                            <span className="truncate">Create New Lineup</span>
-                                        </button>
+                                        <Link to="/create" state={{ lineupName: lineupName }}>
+                                            <button
+                                                className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 px-4 @[480px]:h-12 @[480px]:px-5 bg-[#19cc58] text-[#111813] text-sm font-bold leading-normal tracking-[0.015em] @[480px]:text-base @[480px]:font-bold @[480px]:leading-normal @[480px]:tracking-[0.015em]"
+                                            >
+                                                <span className="truncate">Create New Lineup</span>
+                                            </button>
+                                        </Link>
                                     </div>
                                 </div>
                             </label>
@@ -101,7 +104,6 @@ const Home = ({ user, logoutCallback }) => {
             <div className="layout-content-container flex flex-col max-w-[960px] w-full mx-auto flex-1">
                 {user?.isAuthenticated ? (
                     <div className="px-4 pb-3 pt-5">
-                        {/*<h1 className="text-white text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5">Welcome, {user?.name}!</h1>*/}
                         {artistLists.length > 0 ? <ArtistListList artlistLists={artistLists} refreshArtistLists={fetchArtistLists} />: <></>}
                         <button onClick={logoutCallback}>Log Out</button>
                     </div>

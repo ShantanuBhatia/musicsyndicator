@@ -1,14 +1,16 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { artistListApi } from '../services/apiService';
 import Search from "./Search";
 
 const CreateNewList = ({ user }) => {
     const [selectedArtists, setSelectedArtists] = useState([]);
-    const [listTitle, setListTitle] = useState("");
+    
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState(null);
     const navigate = useNavigate();
+    const location = useLocation();
+    const [listTitle, setListTitle] = useState(location.state ? location.state.lineupName : "");
 
 
     const handleLogin = () => {

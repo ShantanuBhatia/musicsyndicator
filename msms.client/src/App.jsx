@@ -35,7 +35,7 @@ function App() {
 
     return (
         <Router>
-            <Navbar />
+            <Navbar user={user} logoutCallback={handleLogout} />
             <div className="relative flex size-full min-h-screen flex-col bg-[#111813] dark group/design-root overflow-x-hidden "
                 style={{
                     fontFamily: ["Plus Jakarta Sans", "Noto Sans", "sans-serif"]
@@ -43,7 +43,7 @@ function App() {
                 }} >
             
             <Routes>
-                <Route exact path="/" element={<Home user={user} logoutCallback={handleLogout} />} />
+                <Route exact path="/" element={<Home user={user}  />} />
                 <Route path="/search" element={<Search user={user} />} />
                 <Route path="/create" element={<CreateNewList user={user} /> } />
                 </Routes>
