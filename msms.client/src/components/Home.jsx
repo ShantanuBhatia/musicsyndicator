@@ -62,7 +62,7 @@ const Home = ({ user, logoutCallback }) => {
                                 <h1
                                     className="text-white text-4xl font-black leading-tight tracking-[-0.033em] @[480px]:text-5xl @[480px]:font-black @[480px]:leading-tight @[480px]:tracking-[-0.033em]"
                                 >
-                                    <br/>Never miss a beat
+                                    <br />Never miss a beat
                                 </h1>
                                 <h2 className="text-white text-sm font-normal leading-normal @[480px]:text-base @[480px]:font-normal @[480px]:leading-normal">
                                     Curate lineups of your favourite artists - we&apos;ll keep you up to date with their latest drops

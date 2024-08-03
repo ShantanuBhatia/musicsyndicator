@@ -1,6 +1,4 @@
-// UserContext.js
 import { createContext, useContext, useState, useEffect } from 'react';
-import axios from 'axios';
 import { authApi } from '../services/apiService';
 
 const UserContext = createContext();
@@ -15,8 +13,9 @@ export function UserProvider({ children }) {
 
     const fetchUser = async () => {
         try {
-            const response = await axios.get('/api/auth/user', { withCredentials: true });
-            setUser(response.data);
+            const response = await authApi.getUserInfo();
+            console.log(`wheeeeee ${JSON.stringify(response)}`);
+            setUser(response);
         } catch (error) {
             console.error('Error fetching user:', error);
         } finally {
@@ -26,7 +25,7 @@ export function UserProvider({ children }) {
 
     const handleLogout = async () => {
         try {
-            await axios.post('/api/auth/logout', {}, { withCredentials: true });
+            await authApi.logout();
             setUser({ isAuthenticated: false });
         } catch (error) {
             console.error('Error logging out:', error);

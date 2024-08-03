@@ -35,7 +35,7 @@ export const authApi = {
     },
     logout: async () => {
         try {
-            const response = await api.post('/api/auth/logout');
+            const response = axios.post('/api/auth/logout', {}, { withCredentials: true });
             return response.data;
         } catch (error) {
             throw handleApiError(error);
@@ -43,7 +43,7 @@ export const authApi = {
     },
     getUserInfo: async () => {
         try {
-            const response = await api.get('/api/auth/user');
+            const response = await axios.get('/api/auth/user', { withCredentials: true });;
             return response.data;
         } catch (error) {
             throw handleApiError(error);

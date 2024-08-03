@@ -1,6 +1,6 @@
 import './Navbar.css'
 
-const Navbar = (user) => {
+const Navbar = ({ user, logoutCallback, randomProp }) => {
 
     const handleLogin = () => {
         window.location.href = 'https://localhost:7183/api/auth/login';
@@ -14,14 +14,14 @@ const Navbar = (user) => {
             <div className="layout-container flex h-full grow flex-col">
                 <header className="flex items-center justify-between whitespace-nowrap border-b border-solid border-b-[#29382e] px-10 py-3">
                     <div className="flex items-center gap-4 text-white">
-                        <h2 className="text-white text-lg font-bold leading-tight tracking-[-0.015em]">{user.name}&apos;s Lineup</h2>
+                        <h2 className="text-white text-lg font-bold leading-tight tracking-[-0.015em]">{user.isAuthenticated? `${user.name}'s Lineups` : "Lineup"}</h2>
                     </div>
                     <div className="flex flex-1 justify-end gap-8">
                         <div className="flex gap-2">
                             {user?.isAuthenticated ?
                                 <button
                                 className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 px-4 bg-[#19cc58] text-[#111813] text-sm font-bold leading-normal tracking-[0.015em]"
-                                onClick={handleLogin}
+                                    onClick={logoutCallback}
                                 >
                                     <span className="truncate">Log Out</span>
                                 </button> 
