@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { artistListApi } from '../services/apiService';
 import Search from "./Search";
+import ArtistPreview from './ArtistPreview';
 
 const CreateNewList = ({ user }) => {
     const [selectedArtists, setSelectedArtists] = useState([]);
@@ -12,10 +13,6 @@ const CreateNewList = ({ user }) => {
     const location = useLocation();
     const [listTitle, setListTitle] = useState(location.state ? location.state.lineupName : "");
 
-
-    const handleLogin = () => {
-        window.location.href = 'https://localhost:7183/api/auth/login';
-    };
 
 
     //// Select/deselect artist when clicked
@@ -55,30 +52,63 @@ const CreateNewList = ({ user }) => {
     }
 
     return (
-        <div>{
-            user?.isAuthenticated ?
-                <>
-                    <h1>Create new Artist List</h1>
-                    <form onSubmit={createArtistList}>
+        <div className="px-24 flex py-5 gap-16">
+            <div className="order-2 flex flex-col flex-initial w-full max-w-[600px] min-w-[300px] mx-auto gap-y-4">
+                <h1
+                    className="text-white text-3xl font-black leading-tight"
+                >
+                    Artist Search
+                </h1>
+                <Search selectedArtists={selectedArtists} handleArtistClick={handleArtistClick} />
+            </div>
+            <div className="order-1 flex flex-col flex-initial w-full max-w-[600px] min-w-[300px] mx-auto gap-y-4">
+                <h1
+                    className="text-white text-3xl font-black leading-tight"
+                >
+                    Your Lineup
+                </h1>
+
+                <div className="flex w-full mx-auto items-stretch bg-[#111813]">
                         <input
-                            type="text"
+                            placeholder="Enter name here (make it memorable!)"
+                        className="form-input text-white h-10 focus:h-16 w-full text-lg focus:text-2xl bg-[#111813] border-b-2 border-[#19cc58] focus:outline-none transition-[font-size,_padding,_border,_height] duration-300 ease-in-out"
                             value={listTitle}
                             onChange={(e) => setListTitle(e.target.value)}
-                            placeholder="Enter List name"
                         />
-                        <button type="submit" disabled={isSubmitting}> {isSubmitting ? 'Creating...' : 'Save Artist List'}</button>
-                        {error && <p style={{ color: 'red' }}>{error}</p>}
-                    </form>
-                    <p>Selected Artists:</p>
-                    <ul>
-                        {selectedArtists && selectedArtists.map((artist) => <li key={artist.id}>{artist.name}</li>)}
-                    </ul>
-                    <Search handleArtistClick={handleArtistClick} selectedArtists={selectedArtists} />
-                </>
-            :
-                (<button onClick={handleLogin}>Log in with Spotify</button>)
-        }</div>
+                </div>
+
+                {selectedArtists.length !== 0 ? < div className="flex-row h-80 overflow-y-auto">
+                    {selectedArtists && selectedArtists.map((artist) => (
+                        <ArtistPreview key={artist.id} artist={artist} isSearchItem={false} isSelected={selectedArtists.some(a => a.id === artist.id)} onClick={() => { handleArtistClick(artist) }} />
+                    ))}
+                </div> :
+                    <p className="text-[#9db8a7] text-base py-8">
+                    It&apos;s lonely in here...add some artists to get started 
+                </p>}
+        </div>
+        </div>
     );
+
+    //return (
+    //    <>
+    //        <h1>Create new Artist List</h1>
+    //        <form onSubmit={createArtistList}>
+    //            <input
+    //                type="text"
+    //                value={listTitle}
+    //                onChange={(e) => setListTitle(e.target.value)}
+    //                placeholder="Enter List name"
+    //            />
+    //            <button type="submit" disabled={isSubmitting}> {isSubmitting ? 'Creating...' : 'Save Artist List'}</button>
+    //            {error && <p style={{ color: 'red' }}>{error}</p>}
+    //        </form>
+    //        <p>Selected Artists:</p>
+    //        <ul>
+    //            {selectedArtists && selectedArtists.map((artist) => <li key={artist.id}>{artist.name}</li>)}
+    //        </ul>
+    //        <Search handleArtistClick={handleArtistClick} selectedArtists={selectedArtists} />
+    //    </>
+    //);
 }
 
 export default CreateNewList;

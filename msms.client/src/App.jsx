@@ -27,10 +27,10 @@ const AppContent = () => {
         return <div>Loading...</div>;
     }
     return (
-        <>
+        <div className="flex flex-col size-full min-h-svh">
             <Navbar user={user} logoutCallback={handleLogout} />
             <div
-                className="relative flex size-full min-h-screen flex-col bg-[#111813] dark group/design-root overflow-x-hidden "
+                className="relative flex flex-1 flex-col bg-[#111813] dark group/design-root "
                 style={{
                     fontFamily: ["Plus Jakarta Sans", "Noto Sans", "sans-serif"]
 
@@ -42,7 +42,7 @@ const AppContent = () => {
                     <Route path="/create" element={<CreateNewList user={user} />} />
                 </Routes>
             </div>
-        </>
+        </div>
     )
 }
 

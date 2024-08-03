@@ -97,8 +97,22 @@ export const playlistApi = {
     },
 };
 
+export const artistSearchApi = {
+    searchByName: async (artistName, cancellationToken) => {
+        try {
+            const response = await await axios.get(`/api/search/artists?query=${artistName}`, {
+                cancelToken: cancellationToken
+            });
+            return response.data;
+        } catch (error) {
+            throw handleApiError(error);
+        }
+    },
+};
+
 export default {
     authApi,
     artistListApi,
     playlistApi,
+    artistSearchApi
 };

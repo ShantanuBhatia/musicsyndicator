@@ -46,7 +46,7 @@ const Home = ({ user, logoutCallback }) => {
 
 
     return (
-        <div className="px-24 flex flex-1 flex-col  py-5">
+        <div className="px-24 flex flex-1 flex-col min-w-[600px] py-5">
             <div className="layout-content-container flex flex-col max-w-[960px] mx-auto w-full flex-1">
                 <div className="@container">
                     <div className="@[480px]:p-4">
@@ -70,16 +70,9 @@ const Home = ({ user, logoutCallback }) => {
                             </div>
                             <label className="flex flex-col min-w-40 h-14 w-full max-w-[480px] @[480px]:h-16">
                                 <div className="flex w-full flex-1 items-stretch rounded-xl h-full">
-                                    <div
-                                        className="text-[#9db8a7] flex border border-[#3c5344] bg-[#1c2620] items-center justify-center pl-[15px] rounded-l-xl border-r-0"
-                                        data-icon="MagnifyingGlass"
-                                        data-size="20px"
-                                        data-weight="regular"
-                                    >
-                                    </div>
                                     <input
                                         placeholder={placeholderLineups[placeholderIndex]}
-                                        className="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-white focus:outline-0 focus:ring-0 border border-[#3c5344] bg-[#1c2620] focus:border-[#3c5344] h-full placeholder:text-[#9db8a7] px-[15px] rounded-r-none border-r-0 pr-2 rounded-l-none border-l-0 pl-2 text-sm font-normal leading-normal @[480px]:text-base @[480px]:font-normal @[480px]:leading-normal"
+                                        className="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-white focus:outline-0 focus:ring-0 border border-[#3c5344] bg-[#1c2620] focus:border-[#3c5344] h-full placeholder:text-[#9db8a7] rounded-r-none border-r-0 pr-2 border-l-0 pl-2 text-sm font-normal leading-normal @[480px]:text-base @[480px]:font-normal @[480px]:leading-normal"
                                         value={lineupName}
                                         onChange={(e) => setLineupName(e.target.value)}
                                     />

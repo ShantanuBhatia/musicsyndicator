@@ -1,6 +1,6 @@
 import './Navbar.css'
 
-const Navbar = ({ user, logoutCallback, randomProp }) => {
+const Navbar = ({ user, logoutCallback}) => {
 
     const handleLogin = () => {
         window.location.href = 'https://localhost:7183/api/auth/login';
