@@ -14,7 +14,7 @@ api.interceptors.response.use(
         console.log("Wee woo it's the fun police")
         if (error.response && error.response.status === 401) {
             console.log("Auth request fired")
-            //window.location.href = 'https://localhost:7183/api/auth/login';
+            window.location.href = 'https://localhost:7183/api/auth/login';
         }
         return Promise.reject(error);
     }
