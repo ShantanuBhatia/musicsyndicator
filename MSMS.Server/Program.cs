@@ -9,6 +9,10 @@ using MSMS.Server.Interfaces;
 using MSMS.Server.Repository;
 using MSMS.Server.Helpers;
 using SpotifyAPI.Web;
+using MSMS.Server.Infrastructure;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -40,6 +44,7 @@ builder.Services.AddScoped<IPlaylistRepository, PlaylistRepository>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSingleton(SpotifyClientConfig.CreateDefault());
 builder.Services.AddScoped<SpotifyClientBuilder>();
+builder.Services.AddTransient<CustomSpotifyHandler>();
 
 
 // spotify auth stuff 
@@ -47,12 +52,9 @@ builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
     options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = SpotifyAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = "Spotify";
 })
-.AddCookie(options =>
-{
-    options.ExpireTimeSpan = TimeSpan.FromMinutes(65);
-})
+.AddCookie()
 .AddSpotify(options =>
 {
     options.ClientId = builder.Configuration["Spotify:ClientId"];
@@ -62,8 +64,39 @@ builder.Services.AddAuthentication(options =>
     options.Scope.Add("user-read-private");
     options.Scope.Add("user-read-email");
     options.Scope.Add("playlist-modify-public");
-    options.Scope.Add("playlist-modify-private"); // I wonder why these are two different permissions?
+    options.Scope.Add("playlist-modify-private"); 
+})
+.AddScheme<SpotifyAuthenticationOptions, CustomSpotifyHandler>("CustomSpotify", options => {
+    //var spotifyOptions = builder.Services.BuildServiceProvider()
+    //        .GetRequiredService<IOptions<SpotifyAuthenticationOptions>>().Value;
+    //options.ClientId = spotifyOptions.ClientId;
+    //options.ClientSecret = spotifyOptions.ClientSecret;
+    //options.CallbackPath = spotifyOptions.CallbackPath;
+    //options.SaveTokens = spotifyOptions.SaveTokens;
+
+    //foreach (var scope in spotifyOptions.Scope)
+    //{
+    //    options.Scope.Add(scope);
+    //}
+    options.ClientId = builder.Configuration["Spotify:ClientId"];
+    options.ClientSecret = builder.Configuration["Spotify:ClientSecret"];
+    options.CallbackPath = "/signin-spotify-auth";
+    options.SaveTokens = true;
+    options.Scope.Add("user-read-private");
+    options.Scope.Add("user-read-email");
+    options.Scope.Add("playlist-modify-public");
+    options.Scope.Add("playlist-modify-private");
 });
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("SpotifyNoRedirect", policy =>
+    {
+        policy.AddAuthenticationSchemes("CustomSpotify")
+              .RequireAuthenticatedUser();
+    });
+});
+
 
 // CORS for react app
 builder.Services.AddCors(options =>
@@ -96,6 +129,18 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthentication();
+app.Use(async (context, next) =>
+{
+    var logger = context.RequestServices.GetRequiredService<ILogger<Program>>();
+    logger.LogInformation($"Request Path: {context.Request.Path}");
+    logger.LogInformation($"User Authenticated: {context.User.Identity?.IsAuthenticated}");
+    logger.LogInformation($"Authentication Type: {context.User.Identity?.AuthenticationType}");
+    if (context.User.Identity?.IsAuthenticated == true)
+    {
+        logger.LogInformation($"User Claims: {string.Join(", ", context.User.Claims.Select(c => $"{c.Type}: {c.Value}"))}");
+    }
+    await next();
+});
 app.UseAuthorization();
 
 

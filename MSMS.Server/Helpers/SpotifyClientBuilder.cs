@@ -20,7 +20,7 @@ namespace MSMS.Server.Helpers
 
         public async Task<SpotifyClient> BuildClient()
         {
-            await Console.Out.WriteLineAsync("\n\n\n\n\n\n");
+
             var accessToken = await _httpContextAccessor.HttpContext.GetTokenAsync("access_token");
             var expiresAt = await _httpContextAccessor.HttpContext.GetTokenAsync("expires_at");
 
