@@ -8,20 +8,31 @@ export function UserProvider({ children }) {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        
+        let ignore = false;
+
+        const fetchUser = async () => {
+            try {
+                const response = await authApi.getUserInfo();
+                if (!ignore) {
+                    setUser(response);
+                }
+            } catch (error) {
+                console.error('Error fetching user:', error);
+            } finally {
+                if (!ignore) setLoading(false);
+            }
+        };
+
+
         fetchUser();
+
+        return (() => {
+            ignore = true;
+        })
     }, []);
 
-    const fetchUser = async () => {
-        try {
-            const response = await authApi.getUserInfo();
-            console.log(`wheeeeee ${JSON.stringify(response)}`);
-            setUser(response);
-        } catch (error) {
-            console.error('Error fetching user:', error);
-        } finally {
-            setLoading(false);
-        }
-    };
+    
 
     const handleLogout = async () => {
         try {

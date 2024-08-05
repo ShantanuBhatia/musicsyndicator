@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { artistListApi } from '../services/apiService';
 import ArtistListList from './ArtistListList';
 import heroBanner from "../assets/herobanner.jpg";
+import FadeInSection from './FadeInSection';
 
 const placeholderLineups = ["Pop Girlies?", "Sadboi Classics?", "The Big Three?", "BTS Member Solos?"];
 
@@ -39,19 +40,18 @@ const Home = ({ user, logoutCallback }) => {
         };
         setInterval(timer, 2500);
 
-        //cleanup function in order clear the interval timer
-        //when the component unmounts
         return () => { clearInterval(timer); }
     }, []);
 
 
     return (
         <div className="px-24 flex flex-1 flex-col min-w-[600px] py-5">
+            <FadeInSection>
             <div className="layout-content-container flex flex-col max-w-[960px] mx-auto w-full flex-1">
                 <div className="@container">
                     <div className="@[480px]:p-4">
                         <div
-                            className="flex min-h-[480px] flex-col gap-6 bg-cover bg-center bg-no-repeat @[480px]:gap-8 @[480px]:rounded-xl items-start justify-end px-4 pb-10 @[480px]:px-10"
+                            className="flex min-h-[480px] flex-col rounded-md gap-6 bg-cover bg-center bg-no-repeat @[480px]:gap-8 @[480px]:rounded-xl items-start justify-end px-4 pb-10 @[480px]:px-10"
                             style={{
                                 backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.4) 100%), url(${heroBanner})`,
                                 
@@ -92,18 +92,19 @@ const Home = ({ user, logoutCallback }) => {
                 </div>
 
             </div>
-
-
-            <div className="layout-content-container flex flex-col max-w-[960px] w-full mx-auto flex-1">
-                {user?.isAuthenticated ? (
-                    <div className="px-4 pb-3 pt-5">
-                        {artistLists.length > 0 ? <ArtistListList artlistLists={artistLists} refreshArtistLists={fetchArtistLists} />: <></>}
-                        <button onClick={logoutCallback}>Log Out</button>
-                    </div>
-                ) : (
-                        <button onClick={handleLogin}>Log in with Spotify</button>
-                )}
-            </div>
+            </FadeInSection>
+            <FadeInSection delay={0.3}>
+                <div className="layout-content-container flex flex-col max-w-[960px] w-full mx-auto flex-1">
+                    {user?.isAuthenticated ? (
+                        <div className="px-4 pb-3 pt-5">
+                            {artistLists.length > 0 ? <ArtistListList artlistLists={artistLists} refreshArtistLists={fetchArtistLists} />: <></>}
+                            <button onClick={logoutCallback}>Log Out</button>
+                        </div>
+                    ) : (
+                            <button onClick={handleLogin}>Log in with Spotify</button>
+                    )}
+                </div>
+            </FadeInSection>
         </div>
     );
 };

@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 import './App.css';
-import { authApi } from './services/apiService'
 import { UserProvider, useUser} from './hooks/UserContext'
 import Navbar from './components/Navbar';
 import Home from './components/Home';

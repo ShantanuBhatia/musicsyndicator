@@ -1,4 +1,4 @@
-import './Navbar.css'
+import { Link } from 'react-router-dom';
 
 const Navbar = ({ user, logoutCallback}) => {
 
@@ -13,8 +13,10 @@ const Navbar = ({ user, logoutCallback}) => {
             }} >
             <div className="layout-container flex h-full grow flex-col">
                 <header className="flex items-center justify-between whitespace-nowrap border-b border-solid border-b-[#29382e] px-10 py-3">
-                    <div className="flex items-center gap-4 text-white">
-                        <h2 className="text-white text-lg font-bold leading-tight tracking-[-0.015em]">{user.isAuthenticated? `${user.name}'s Lineups` : "Lineup"}</h2>
+                    <div className="flex items-center gap-4">
+                        <Link to="/">
+                            <h2 className="text-white cursor-pointer text-lg font-bold leading-tight hover:text-gray-400 tracking-[-0.015em]">{user.isAuthenticated ? `${user.name}'s Lineups` : "Lineup"}</h2>
+                        </Link>
                     </div>
                     <div className="flex flex-1 justify-end gap-8">
                         <div className="flex gap-2">

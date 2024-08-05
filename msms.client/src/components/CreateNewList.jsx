@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { artistListApi } from '../services/apiService';
 import Search from "./Search";
 import ArtistPreview from './ArtistPreview';
+import FadeInSection from './FadeInSection';
 
 const CreateNewList = ({ user }) => {
     const [selectedArtists, setSelectedArtists] = useState([]);
@@ -52,6 +53,7 @@ const CreateNewList = ({ user }) => {
     }
 
     return (
+        <FadeInSection>
         <div className="px-24 flex py-5 gap-16">
             <div className="order-2 flex flex-col flex-initial w-full max-w-[600px] min-w-[300px] mx-auto gap-y-4">
                 <h1
@@ -86,29 +88,11 @@ const CreateNewList = ({ user }) => {
                     It&apos;s lonely in here...add some artists to get started 
                 </p>}
         </div>
-        </div>
+            </div>
+        </FadeInSection>
     );
 
-    //return (
-    //    <>
-    //        <h1>Create new Artist List</h1>
-    //        <form onSubmit={createArtistList}>
-    //            <input
-    //                type="text"
-    //                value={listTitle}
-    //                onChange={(e) => setListTitle(e.target.value)}
-    //                placeholder="Enter List name"
-    //            />
-    //            <button type="submit" disabled={isSubmitting}> {isSubmitting ? 'Creating...' : 'Save Artist List'}</button>
-    //            {error && <p style={{ color: 'red' }}>{error}</p>}
-    //        </form>
-    //        <p>Selected Artists:</p>
-    //        <ul>
-    //            {selectedArtists && selectedArtists.map((artist) => <li key={artist.id}>{artist.name}</li>)}
-    //        </ul>
-    //        <Search handleArtistClick={handleArtistClick} selectedArtists={selectedArtists} />
-    //    </>
-    //);
+ 
 }
 
 export default CreateNewList;
