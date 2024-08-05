@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-
 import { artistListApi } from '../services/apiService';
 import ArtistListList from './ArtistListList';
 import heroBanner from "../assets/herobanner.jpg";
@@ -8,28 +7,35 @@ import FadeInSection from './FadeInSection';
 
 const placeholderLineups = ["Pop Girlies?", "Sadboi Classics?", "The Big Three?", "BTS Member Solos?"];
 
-const Home = ({ user, logoutCallback }) => {
+const Home = ({ user }) => {
 
     const [artistLists, setArtistLists] = useState([]);
     const [placeholderIndex, setPlaceholderIndex] = useState(0);
     const [lineupName, setLineupName] = useState("");
 
-    const handleLogin = () => {
-        window.location.href = 'https://localhost:7183/api/auth/login';
-    };
-
-    const fetchArtistLists = async () => {
-        if (user?.isAuthenticated) {
-            const myArtistLists = await artistListApi.getAll();
-            setArtistLists(myArtistLists);
-        }
-    }
+    
 
     useEffect(() => {
+        let ignore = false;
+        console.log("Got here 1")
+        const fetchArtistLists = async () => {
+            if (user?.isAuthenticated) {
+                const myArtistLists = await artistListApi.getAll();
+                if (!ignore) setArtistLists(myArtistLists);
+            }
+        }
+
+        console.log(fetchArtistLists);
+        console.log("got here 2")
         fetchArtistLists();
+
+        return (() => {
+            ignore = true;
+        });
     }, [user?.isAuthenticated]);
 
     useEffect(() => {
+        let ignore = false;
         const timer = () => {
             setPlaceholderIndex(prevIndex => {
                 if (prevIndex === placeholderLineups.length - 1) {
@@ -38,9 +44,9 @@ const Home = ({ user, logoutCallback }) => {
                 return prevIndex + 1;
             })
         };
-        setInterval(timer, 2500);
+        if(!ignore) setInterval(timer, 2500);
 
-        return () => { clearInterval(timer); }
+        return (() => { clearInterval(timer); })
     }, []);
 
 
@@ -97,12 +103,9 @@ const Home = ({ user, logoutCallback }) => {
                 <div className="layout-content-container flex flex-col max-w-[960px] w-full mx-auto flex-1">
                     {user?.isAuthenticated ? (
                         <div className="px-4 pb-3 pt-5">
-                            {artistLists.length > 0 ? <ArtistListList artlistLists={artistLists} refreshArtistLists={fetchArtistLists} />: <></>}
-                            <button onClick={logoutCallback}>Log Out</button>
+                            {artistLists.length > 0 ? <ArtistListList user={user} />: <></>}
                         </div>
-                    ) : (
-                            <button onClick={handleLogin}>Log in with Spotify</button>
-                    )}
+                    ) : <></>}
                 </div>
             </FadeInSection>
         </div>

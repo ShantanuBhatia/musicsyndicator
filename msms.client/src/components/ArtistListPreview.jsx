@@ -1,29 +1,10 @@
-import { useState } from 'react';
-import { playlistApi } from '../services/apiService';
-
-const ArtistListPreview = ({ ArtistList, refreshArtistLists }) => {
-    const [isSubmitting, setIsSubmitting] = useState(false);
-    const [error, setError] = useState(null);
-
-    const createPlaylist = async (e) => {
+const ArtistListPreview = ({ ArtistList, isSubmitting, error, createPlaylist }) => {
+    
+    const handleGenerateClick = (e) => {
         e.preventDefault();
-        setIsSubmitting(true);
-        setError(null);
-        try {
-            await playlistApi.create({
-                artistListId: ArtistList.artistListId,
-                spotifyPlaylistName: ArtistList.artistListName
-            });
-        }
-        catch (err) {
-            setError('Failed to create playlist. Please try again.');
-            console.error('Error creating artist list:', err);
-        }
-        finally {
-            setIsSubmitting(false);
-            refreshArtistLists();
-        }
+        createPlaylist(ArtistList)
     }
+
 
     const getArtistSummary = (artists) => {
         if (artists.length  < 1) {
@@ -46,7 +27,12 @@ const ArtistListPreview = ({ ArtistList, refreshArtistLists }) => {
         if (ArtistList.playlistId) {
             return (<a className="text-white hover:text-[#19cc58] text-sm font-normal leading-normal" href={`https://open.spotify.com/playlist/${ArtistList.playlistId}`} target="_blank">Open Spotify Playlist</a>);
         }
-        return <button onClick={createPlaylist} disabled={isSubmitting}>{isSubmitting? "Creating..." : "Create Playlist"}</button>
+        return <button
+            onClick={handleGenerateClick}
+            className="text-white hover:text-[#19cc58] text-sm font-normal leading-normal" 
+            disabled={isSubmitting}>
+            {isSubmitting ? "Creating..." : "Create Playlist"}
+        </button>
     }
 
     return (

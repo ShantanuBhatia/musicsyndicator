@@ -1,4 +1,4 @@
-const ArtistPreview = ({ artist, isSelected, onClick, isSearchItem }) => {
+const ArtistPreview = ({ artist, isSelected, onClick }) => {
 
     return (
         <div

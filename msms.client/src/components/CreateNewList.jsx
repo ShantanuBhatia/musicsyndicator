@@ -6,8 +6,9 @@ import ArtistPreview from './ArtistPreview';
 import FadeInSection from './FadeInSection';
 
 const CreateNewList = ({ user }) => {
-    const [selectedArtists, setSelectedArtists] = useState([]);
-    
+
+
+    const [selectedArtists, setSelectedArtists] = useState([]);    
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState(null);
     const navigate = useNavigate();
@@ -70,13 +71,19 @@ const CreateNewList = ({ user }) => {
                     Your Lineup
                 </h1>
 
-                <div className="flex w-full mx-auto items-stretch bg-[#111813]">
+                <div className="flex flex-row w-full mx-auto items-stretch bg-[#111813]">
                         <input
                             placeholder="Enter name here (make it memorable!)"
                         className="form-input text-white h-10 focus:h-16 w-full text-lg focus:text-2xl bg-[#111813] border-b-2 border-[#19cc58] focus:outline-none transition-[font-size,_padding,_border,_height] duration-300 ease-in-out"
                             value={listTitle}
                             onChange={(e) => setListTitle(e.target.value)}
                         />
+                        <button
+                            className="h-8 px-4 text-sm rounded-full font-medium text-black bg-[#19cc58]"
+                            onClick={createArtistList}
+                        >
+                            Save List
+                        </button>
                 </div>
 
                 {selectedArtists.length !== 0 ? < div className="flex-row h-80 overflow-y-auto">
