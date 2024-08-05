@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 import './App.css';
-import { UserProvider, useUser} from './hooks/UserContext'
+import { UserProvider, useUser, PrivateRoute } from './hooks/UserContext'
 import Navbar from './components/Navbar';
 import Home from './components/Home';
 import Search from './components/Search';
@@ -38,7 +38,7 @@ const AppContent = () => {
                 <Routes>
                     <Route exact path="/" element={<Home user={user} />} />
                     <Route path="/search" element={<Search user={user} />} />
-                    <Route path="/create" element={<CreateNewList user={user} />} />
+                    <Route path="/create" element={<PrivateRoute><CreateNewList user={user} /></PrivateRoute>} />
                 </Routes>
             </div>
         </div>

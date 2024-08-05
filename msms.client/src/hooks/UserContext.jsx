@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect } from 'react';
+import { Route, Navigate } from 'react-router-dom';
 import { authApi } from '../services/apiService';
 
 const UserContext = createContext();
@@ -52,6 +53,24 @@ export function UserProvider({ children }) {
 
     return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
 }
+
+export const PrivateRoute = ({ children, ...rest }) => {
+    let user = useUser();
+    return (
+        <Route
+            {...rest}
+            render={() =>
+                user.isAuthenticated ? (
+                    children
+                ) : (
+                    <></>
+                )
+            }
+        />
+
+    );
+}
+
 
 export const useUser = () => {
     const context = useContext(UserContext);
