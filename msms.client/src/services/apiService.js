@@ -8,6 +8,18 @@ const api = axios.create({
     withCredentials: true,
 });
 
+api.interceptors.response.use(
+    (response) => response,
+    (error) => {
+        console.log("Wee woo it's the fun police")
+        if (error.response && error.response.status === 401) {
+            console.log("Auth request fired")
+            //window.location.href = 'https://localhost:7183/api/auth/login';
+        }
+        return Promise.reject(error);
+    }
+);
+
 const handleApiError = (error) => {
     let errorMessage = 'An unexpected error occurred';
     if (error.response) {
@@ -100,7 +112,8 @@ export const playlistApi = {
 export const artistSearchApi = {
     searchByName: async (artistName, cancellationToken) => {
         try {
-            const response = await await axios.get(`/api/search/artists?query=${artistName}`, {
+            console.log("Firing search!")
+            const response = await await api.get(`/api/search/artists?query=${artistName}`, {
                 cancelToken: cancellationToken
             });
             return response.data;
