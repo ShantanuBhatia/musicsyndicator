@@ -1,67 +1,39 @@
-import { useState, useEffect } from 'react';
-import { artistSearchApi } from '../services/apiService'
+import { useState } from 'react';
 import axios from 'axios';
 import ArtistPreview from './ArtistPreview';
-import { useDebounce } from 'use-debounce';
 
 
 const Search = ({ handleArtistClick, selectedArtists }) => {
     const [query, setQuery] = useState('');
     const [results, setResults] = useState([]);
-    const [debouncedQuery] = useDebounce(query, 500);
-    const [fillerText, setFillerText] = useState("Start typing to get results")
 
-
-
-    useEffect(() => {
-        const source = axios.CancelToken.source();
-
-        const fetchResults = async () => {
-            if (debouncedQuery) {
-                try {
-                    setFillerText("Searching...")
-                    const response = await artistSearchApi.searchByName(debouncedQuery, source.token);
-                    console.log(JSON.stringify(response))
-                    setResults(response);
-                    
-                    setFillerText(response.length===0 ? "No results found" : "");
-                }
-                catch (error) {
-                    if (axios.isCancel(source)) return;
-                    setFillerText("Something went wrong. Try refreshing the page.")
-                }
-
-            } else {
-                setFillerText("Start typing to get search results")
-                setResults([]);
-            }
+    const handleSearch = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await axios.get(`/api/search/artists?query=${query}`);
+            setResults(response.data);
+        } catch (error) {
+            console.error('Error searching artists:', error);
         }
-
-        fetchResults();
-
-        return () => {
-            source.cancel(
-                "Canceled because of component unmounted or debounce Text changed"
-            );
-        };
-    }, [debouncedQuery]);
-
+    };
 
 
     return (
-        <div className="flex flex-col w-full mx-auto items-stretch gap-2">
-            <input
-                className="form-input text-white h-10  w-full text-lg bg-[#111813] border-b-2 border-[#19cc58] focus:outline-none"
+        <div>
+            <h3>Search Artists</h3>
+            <form onSubmit={handleSearch}>
+                <input
                     type="text"
                     value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                    placeholder="Search for artists on Spotify"
-            />
-            {!fillerText ? <div className="flex-row h-80 overflow-y-auto">
+                    onChange={(e) => setQuery(e.target.value)}
+                    placeholder="Enter artist name"
+                />
+                <button type="submit">Search</button>
+            </form>
+
                 {results && results.map((artist) => (
-                    <ArtistPreview key={artist.id} artist={artist} isSearchItem={true}  isSelected={selectedArtists.some(a => a.id === artist.id)} onClick={() => { handleArtistClick(artist)} } />
+                    <ArtistPreview key={artist.id} artist={artist} isSelected={selectedArtists.some(a => a.id === artist.id)} onClick={() => handleArtistClick(artist)} />
                 ))}
-            </div> : <h2 className="text-[#9db8a7] text-base py-8">{fillerText}</h2>}
 
         </div>
     );

@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using SpotifyAPI.Web;
 using MSMS.Server.Helpers;
-using System.Security.Claims;
 
 namespace MSMS.Server.Controllers
 {
@@ -20,21 +19,12 @@ namespace MSMS.Server.Controllers
 
 
         [HttpGet("artists")]
-        [Authorize(Policy = "SpotifyNoRedirect")]
+        [Authorize]
         public async Task<IActionResult> SearchArtists(string query)
         {
-            
             try
             {
                 var spotify = await _spotifyClientBuilder.BuildClient();
-                var spotifyUserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-                if (string.IsNullOrEmpty(spotifyUserId))
-                {
-                    return Unauthorized("Could not authenticate user.");
-                }
-
-
                 var searchResponse = await spotify.Search.Item(new SearchRequest(SearchRequest.Types.Artist, query));
                 
                 return Ok(searchResponse.Artists.Items);

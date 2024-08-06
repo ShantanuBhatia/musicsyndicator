@@ -2,53 +2,51 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 import './App.css';
-import { UserProvider, useUser, PrivateRoute } from './hooks/UserContext'
 import Navbar from './components/Navbar';
 import Home from './components/Home';
 import Search from './components/Search';
 import CreateNewList from './components/CreateNewList';
-import NotFound from './components/NotFound';
 
-const App = () => { 
+function App() {
+    const [user, setUser] = useState(null);
+
+
+    useEffect(() => {
+        fetchUser();
+    }, []);
+
+    const fetchUser = async () => {
+        try {
+            const response = await axios.get('/api/auth/user', { withCredentials: true });
+            setUser(response.data);
+        } catch (error) {
+            console.error('Error fetching user:', error);
+        }
+    };
+
+    const handleLogout = async () => {
+        try {
+            await axios.post('/api/auth/logout', {}, { withCredentials: true });
+            setUser({ isAuthenticated: false });
+        } catch (error) {
+            console.error('Error logging out:', error);
+        }
+    };
 
     return (
-        <UserProvider>
-            <Router>
-                <AppContent />
-            </Router>
-        </UserProvider>
+        <Router>
+            <Navbar name={"MSMS"} />
+            <Routes>
+                <Route exact path="/" element={<Home user={user} logoutCallback={handleLogout} />} />
+                <Route path="/search" element={<Search user={user} />} />
+                <Route path="/create" element={<CreateNewList user={user} /> } />
+            </Routes>
+        </Router>
     );
-}
+    
 
-const AppContent = () => {
-    const { user, handleLogout, loading } = useUser();
 
-    if (loading) {
-        return <div>Loading...</div>;
-    }
-    return (
-        <div className="flex flex-col size-full min-h-svh">
-            <Navbar user={user} logoutCallback={handleLogout} />
-            <div
-                className="relative flex flex-1 flex-col bg-[#111813] dark group/design-root "
-                style={{
-                    fontFamily: ["Plus Jakarta Sans", "Noto Sans", "sans-serif"]
-
-                }}
-            >
-                <Routes>
-                    <Route exact path="/" element={<Home user={user} />} />
-                    <Route path="/search" element={<Search user={user} />} />
-                    <Route path="/create" element={
-                        <PrivateRoute>
-                            <CreateNewList user={user} />
-                        </PrivateRoute>
-                    } />
-                    <Route path='*' element={<NotFound />} />
-                </Routes>
-            </div>
-        </div>
-    )
+    
 }
 
 export default App;
