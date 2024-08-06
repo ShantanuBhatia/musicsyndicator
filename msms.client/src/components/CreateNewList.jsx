@@ -79,7 +79,7 @@ const CreateNewList = ({ user }) => {
                             onChange={(e) => setListTitle(e.target.value)}
                         />
                         <button
-                            className="h-8 px-4 text-sm rounded-full font-medium text-black bg-[#19cc58]"
+                            className="h-8 px-4 min-w-[120px] text-sm rounded-full font-bold leading-normal tracking-[0.015em] text-black bg-[#19cc58]"
                             onClick={createArtistList}
                         >
                             Save List

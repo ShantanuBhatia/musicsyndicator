@@ -1,5 +1,3 @@
-import { useEffect, useState } from 'react';
-import axios from 'axios';
 import { BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 import './App.css';
 import { UserProvider, useUser, PrivateRoute } from './hooks/UserContext'
@@ -24,7 +22,7 @@ const AppContent = () => {
     const { user, handleLogout, loading } = useUser();
 
     if (loading) {
-        return <div>Loading...</div>;
+        return (<div className="bg-[#111813] dark group/design-root"></div>);
     }
     return (
         <div className="flex flex-col size-full min-h-svh">

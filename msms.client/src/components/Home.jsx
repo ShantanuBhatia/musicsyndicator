@@ -65,34 +65,37 @@ const Home = ({ user }) => {
                             alt="Photo by Elviss Railijs Bitans"
                         >
                             <div className="flex flex-col gap-2 text-left">
-                                <h1
-                                    className="text-white text-4xl font-black leading-tight tracking-[-0.033em] @[480px]:text-5xl @[480px]:font-black @[480px]:leading-tight @[480px]:tracking-[-0.033em]"
-                                >
-                                    <br />Never miss a beat
-                                </h1>
-                                <h2 className="text-white text-sm font-normal leading-normal @[480px]:text-base @[480px]:font-normal @[480px]:leading-normal">
-                                    Curate lineups of your favourite artists - we&apos;ll keep you up to date with their latest drops
-                                </h2>
-                            </div>
-                            <label className="flex flex-col min-w-40 h-14 w-full max-w-[480px] @[480px]:h-16">
-                                <div className="flex w-full flex-1 items-stretch rounded-xl h-full">
-                                    <input
-                                        placeholder={placeholderLineups[placeholderIndex]}
-                                        className="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-white focus:outline-0 focus:ring-0 border border-[#3c5344] bg-[#1c2620] focus:border-[#3c5344] h-full placeholder:text-[#9db8a7] rounded-r-none border-r-0 pr-2 border-l-0 pl-2 text-sm font-normal leading-normal @[480px]:text-base @[480px]:font-normal @[480px]:leading-normal"
-                                        value={lineupName}
-                                        onChange={(e) => setLineupName(e.target.value)}
-                                    />
-                                    <div className="flex items-center justify-center rounded-r-xl border-l-0 border border-[#3c5344] bg-[#1c2620] pr-[7px]">
-                                        <Link to="/create" state={{ lineupName: lineupName }}>
-                                            <button
-                                                className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 px-4 @[480px]:h-12 @[480px]:px-5 bg-[#19cc58] text-[#111813] text-sm font-bold leading-normal tracking-[0.015em] @[480px]:text-base @[480px]:font-bold @[480px]:leading-normal @[480px]:tracking-[0.015em]"
-                                            >
-                                                <span className="truncate">Create New Lineup</span>
-                                            </button>
-                                        </Link>
-                                    </div>
+                                    <h1
+                                        className="text-white text-4xl font-black leading-tight tracking-[-0.033em] @[480px]:text-5xl @[480px]:font-black @[480px]:leading-tight @[480px]:tracking-[-0.033em]"
+                                    >
+                                        <br />Never miss a beat
+                                    </h1>
+                                    <h2 className="text-white text-sm font-normal leading-normal @[480px]:text-base @[480px]:font-normal @[480px]:leading-normal">
+                                        Curate lineups of your favourite artists - we&apos;ll keep you up to date with their latest drops
+                                    </h2>
+                                    <h2 className="text-white text-sm font-normal leading-normal @[480px]:text-base @[480px]:font-normal @[480px]:leading-normal">
+                                        Sign in with spotify, create a new Lineup, and add your favourite artists. When you're done, generate a Spotify playlist from your lineup. We&apos;ll add new releases as they drop.
+                                    </h2>
                                 </div>
-                            </label>
+                                {user.isAuthenticated && < label className="flex flex-col min-w-40 h-14 w-full max-w-[480px] @[480px]:h-16">
+                                    <div className="flex w-full flex-1 items-stretch rounded-xl h-full">
+                                        <input
+                                            placeholder={placeholderLineups[placeholderIndex]}
+                                            className="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-white focus:outline-0 focus:ring-0 border border-[#3c5344] bg-[#1c2620] focus:border-[#3c5344] h-full placeholder:text-[#9db8a7] rounded-r-none border-r-0 pr-2 border-l-0 pl-2 text-sm font-normal leading-normal @[480px]:text-base @[480px]:font-normal @[480px]:leading-normal"
+                                            value={lineupName}
+                                            onChange={(e) => setLineupName(e.target.value)}
+                                        />
+                                        <div className="flex items-center justify-center rounded-r-xl border-l-0 border border-[#3c5344] bg-[#1c2620] pr-[7px]">
+                                            <Link to="/create" state={{ lineupName: lineupName }}>
+                                                <button
+                                                    className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 px-4 @[480px]:h-12 @[480px]:px-5 bg-[#19cc58] text-[#111813] text-sm font-bold leading-normal tracking-[0.015em] @[480px]:text-base @[480px]:font-bold @[480px]:leading-normal @[480px]:tracking-[0.015em]"
+                                                >
+                                                    <span className="truncate">Create New Lineup</span>
+                                                </button>
+                                            </Link>
+                                        </div>
+                                    </div>
+                                </label>}
                         </div>
                     </div>
                 </div>
