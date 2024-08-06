@@ -7,6 +7,7 @@ import Navbar from './components/Navbar';
 import Home from './components/Home';
 import Search from './components/Search';
 import CreateNewList from './components/CreateNewList';
+import NotFound from './components/NotFound';
 
 const App = () => { 
 
@@ -38,7 +39,12 @@ const AppContent = () => {
                 <Routes>
                     <Route exact path="/" element={<Home user={user} />} />
                     <Route path="/search" element={<Search user={user} />} />
-                    <Route path="/create" element={<PrivateRoute><CreateNewList user={user} /></PrivateRoute>} />
+                    <Route path="/create" element={
+                        <PrivateRoute>
+                            <CreateNewList user={user} />
+                        </PrivateRoute>
+                    } />
+                    <Route path='*' element={<NotFound />} />
                 </Routes>
             </div>
         </div>

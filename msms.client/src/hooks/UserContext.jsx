@@ -54,22 +54,15 @@ export function UserProvider({ children }) {
     return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
 }
 
-export const PrivateRoute = ({ children, ...rest }) => {
-    let user = useUser();
-    return (
-        <Route
-            {...rest}
-            render={() =>
-                user.isAuthenticated ? (
-                    children
-                ) : (
-                    <></>
-                )
-            }
-        />
+export const PrivateRoute = ({ children }) => {
+    const { user } = useUser();
 
-    );
-}
+    if (!user || !user.isAuthenticated) {
+        return <Navigate to="/404" replace />;
+    }
+
+    return children;
+};
 
 
 export const useUser = () => {
