@@ -8,6 +8,18 @@ const api = axios.create({
     withCredentials: true,
 });
 
+api.interceptors.response.use(
+    (response) => response,
+    (error) => {
+        console.log("Wee woo it's the fun police")
+        if (error.response && error.response.status === 401) {
+            console.log("Auth request fired")
+            window.location.href = 'https://localhost:7183/api/auth/login';
+        }
+        return Promise.reject(error);
+    }
+);
+
 const handleApiError = (error) => {
     let errorMessage = 'An unexpected error occurred';
     if (error.response) {
@@ -27,7 +39,7 @@ const handleApiError = (error) => {
 export const authApi = {
     login: async () => {
         try {
-            const response = await api.get('/api/auth/login');
+            const response = await axios.get('/api/auth/user', { withCredentials: true });
             return response.data;
         } catch (error) {
             throw handleApiError(error);
@@ -35,7 +47,7 @@ export const authApi = {
     },
     logout: async () => {
         try {
-            const response = await api.post('/api/auth/logout');
+            const response = axios.post('/api/auth/logout', {}, { withCredentials: true });
             return response.data;
         } catch (error) {
             throw handleApiError(error);
@@ -43,7 +55,7 @@ export const authApi = {
     },
     getUserInfo: async () => {
         try {
-            const response = await api.get('/api/auth/user');
+            const response = await axios.get('/api/auth/user', { withCredentials: true });
             return response.data;
         } catch (error) {
             throw handleApiError(error);
@@ -97,8 +109,23 @@ export const playlistApi = {
     },
 };
 
+export const artistSearchApi = {
+    searchByName: async (artistName, cancellationToken) => {
+        try {
+            console.log("Firing search!")
+            const response = await await api.get(`/api/search/artists?query=${artistName}`, {
+                cancelToken: cancellationToken
+            });
+            return response.data;
+        } catch (error) {
+            throw handleApiError(error);
+        }
+    },
+};
+
 export default {
     authApi,
     artistListApi,
     playlistApi,
+    artistSearchApi
 };
