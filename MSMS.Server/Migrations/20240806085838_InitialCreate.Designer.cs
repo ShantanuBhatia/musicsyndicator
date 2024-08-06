@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MSMS.Server.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20240727130019_AddSpotifyPlaylist")]
-    partial class AddSpotifyPlaylist
+    [Migration("20240806085838_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -21,9 +21,9 @@ namespace MSMS.Server.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "8.0.4")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+                .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+            MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
 
             modelBuilder.Entity("ArtistArtistList", b =>
                 {
@@ -46,15 +46,15 @@ namespace MSMS.Server.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ArtistDisplayName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("ArtistSpotifyKey")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
@@ -67,19 +67,19 @@ namespace MSMS.Server.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ArtistListId"));
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("ArtistListId"));
 
                     b.Property<string>("ArtistListName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("UserId")
                         .IsRequired()
                         .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
+                        .HasColumnType("varchar(255)");
 
                     b.HasKey("ArtistListId");
 
@@ -89,19 +89,27 @@ namespace MSMS.Server.Migrations
             modelBuilder.Entity("MSMS.Server.Models.SpotifyPlaylist", b =>
                 {
                     b.Property<string>("SpotifyPlaylistId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("varchar(255)");
 
                     b.Property<int>("ArtistListId")
                         .HasColumnType("int");
 
+                    b.Property<string>("PlaylistKey")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.Property<string>("SpotifyPlaylistName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.HasKey("SpotifyPlaylistId");
+
+                    b.HasIndex("ArtistListId")
+                        .IsUnique();
 
                     b.ToTable("SpotifyLists");
                 });
@@ -119,6 +127,22 @@ namespace MSMS.Server.Migrations
                         .HasForeignKey("ArtistsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("MSMS.Server.Models.SpotifyPlaylist", b =>
+                {
+                    b.HasOne("MSMS.Server.Models.ArtistList", "LinkedArtistList")
+                        .WithOne("LinkedPlaylist")
+                        .HasForeignKey("MSMS.Server.Models.SpotifyPlaylist", "ArtistListId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("LinkedArtistList");
+                });
+
+            modelBuilder.Entity("MSMS.Server.Models.ArtistList", b =>
+                {
+                    b.Navigation("LinkedPlaylist");
                 });
 #pragma warning restore 612, 618
         }
