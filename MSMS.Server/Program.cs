@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using AspNet.Security.OAuth.Spotify;
 using Microsoft.EntityFrameworkCore;
+using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 
 using MSMS.Server.Data;
 using MSMS.Server.Interfaces;
@@ -13,6 +14,7 @@ using MSMS.Server.Infrastructure;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Options;
+using System.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,7 +37,7 @@ builder.Configuration.AddEnvironmentVariables().AddUserSecrets<Program>();
 // Database context stuff
 builder.Services.AddDbContext<ApplicationDBContext>(options =>
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+    options.UseMySql(builder.Configuration.GetConnectionString("DefaultConnection"), ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("DefaultConnection")));
 });
 
 builder.Services.AddScoped<IArtistListRepository, ArtistListRepository>();
@@ -67,17 +69,6 @@ builder.Services.AddAuthentication(options =>
     options.Scope.Add("playlist-modify-private"); 
 })
 .AddScheme<SpotifyAuthenticationOptions, CustomSpotifyHandler>("CustomSpotify", options => {
-    //var spotifyOptions = builder.Services.BuildServiceProvider()
-    //        .GetRequiredService<IOptions<SpotifyAuthenticationOptions>>().Value;
-    //options.ClientId = spotifyOptions.ClientId;
-    //options.ClientSecret = spotifyOptions.ClientSecret;
-    //options.CallbackPath = spotifyOptions.CallbackPath;
-    //options.SaveTokens = spotifyOptions.SaveTokens;
-
-    //foreach (var scope in spotifyOptions.Scope)
-    //{
-    //    options.Scope.Add(scope);
-    //}
     options.ClientId = builder.Configuration["Spotify:ClientId"];
     options.ClientSecret = builder.Configuration["Spotify:ClientSecret"];
     options.CallbackPath = "/signin-spotify-auth";
