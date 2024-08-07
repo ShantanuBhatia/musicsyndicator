@@ -12,21 +12,16 @@ const Home = ({ user }) => {
     const [artistLists, setArtistLists] = useState([]);
     const [placeholderIndex, setPlaceholderIndex] = useState(0);
     const [lineupName, setLineupName] = useState("");
-
     
 
     useEffect(() => {
         let ignore = false;
-        console.log("Got here 1")
         const fetchArtistLists = async () => {
             if (user?.isAuthenticated) {
                 const myArtistLists = await artistListApi.getAll();
                 if (!ignore) setArtistLists(myArtistLists);
             }
         }
-
-        console.log(fetchArtistLists);
-        console.log("got here 2")
         fetchArtistLists();
 
         return (() => {
@@ -74,7 +69,7 @@ const Home = ({ user }) => {
                                         Curate lineups of your favourite artists - we&apos;ll keep you up to date with their latest drops
                                     </h2>
                                     <h2 className="text-white text-sm font-normal leading-normal @[480px]:text-base @[480px]:font-normal @[480px]:leading-normal">
-                                        Sign in with spotify, create a new Lineup, and add your favourite artists. When you're done, generate a Spotify playlist from your lineup. We&apos;ll add new releases as they drop.
+                                        Sign in with spotify, create a new Lineup, and add your favourite artists. When you&apos;re done, generate a Spotify playlist from your lineup. We&apos;ll add new releases as they drop.
                                     </h2>
                                 </div>
                                 {user.isAuthenticated && < label className="flex flex-col min-w-40 h-14 w-full max-w-[480px] @[480px]:h-16">

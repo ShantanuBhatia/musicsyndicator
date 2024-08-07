@@ -1,20 +1,16 @@
 import axios from 'axios';
 
-// Create an axios instance with a base URL
-//    baseURL: process.env.REACT_APP_API_URL || 'http://localhost:5173',
 
 const api = axios.create({
-    baseURL: 'https://localhost:5173',
+    baseURL: import.meta.env.REACT_APP_API_URL || 'https://localhost:5173',
     withCredentials: true,
 });
 
 api.interceptors.response.use(
     (response) => response,
     (error) => {
-        console.log("Wee woo it's the fun police")
         if (error.response && error.response.status === 401) {
-            console.log("Auth request fired")
-            window.location.href = 'https://localhost:7183/api/auth/login';
+            window.location.href = `${import.meta.env.REACT_APP_API_URL || "https://localhost:7183"}/api/auth/login`;
         }
         return Promise.reject(error);
     }
@@ -37,14 +33,6 @@ const handleApiError = (error) => {
 };
 
 export const authApi = {
-    login: async () => {
-        try {
-            const response = await axios.get('/api/auth/user', { withCredentials: true });
-            return response.data;
-        } catch (error) {
-            throw handleApiError(error);
-        }
-    },
     logout: async () => {
         try {
             const response = axios.post('/api/auth/logout', {}, { withCredentials: true });
