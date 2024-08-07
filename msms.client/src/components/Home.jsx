@@ -12,21 +12,16 @@ const Home = ({ user }) => {
     const [artistLists, setArtistLists] = useState([]);
     const [placeholderIndex, setPlaceholderIndex] = useState(0);
     const [lineupName, setLineupName] = useState("");
-
     
 
     useEffect(() => {
         let ignore = false;
-        console.log("Got here 1")
         const fetchArtistLists = async () => {
             if (user?.isAuthenticated) {
                 const myArtistLists = await artistListApi.getAll();
                 if (!ignore) setArtistLists(myArtistLists);
             }
         }
-
-        console.log(fetchArtistLists);
-        console.log("got here 2")
         fetchArtistLists();
 
         return (() => {

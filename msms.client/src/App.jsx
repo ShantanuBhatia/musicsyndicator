@@ -20,6 +20,7 @@ const App = () => {
 
 const AppContent = () => {
     const { user, handleLogout, loading } = useUser();
+    
 
     if (loading) {
         return (<div className="bg-[#111813] dark group/design-root"></div>);

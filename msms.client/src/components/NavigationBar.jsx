@@ -1,9 +1,12 @@
 import { Link } from 'react-router-dom';
 
+
 const NavigationBar = ({ user, logoutCallback}) => {
 
+    
+
     const handleLogin = () => {
-        window.location.href = 'https://localhost:7183/api/auth/login';
+        window.location.href = `${import.meta.env.REACT_APP_API_URL || "https://localhost:7183"}/api/auth/login`;
     };
 
     return (

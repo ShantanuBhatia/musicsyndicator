@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect } from 'react';
-import { Route, Navigate } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import { authApi } from '../services/apiService';
 
 const UserContext = createContext();
@@ -7,6 +7,7 @@ const UserContext = createContext();
 export function UserProvider({ children }) {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
+
 
     useEffect(() => {
         
@@ -33,7 +34,6 @@ export function UserProvider({ children }) {
         })
     }, []);
 
-    
 
     const handleLogout = async () => {
         try {
