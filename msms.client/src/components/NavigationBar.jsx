@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 
-const Navbar = ({ user, logoutCallback}) => {
+const NavigationBar = ({ user, logoutCallback}) => {
 
     const handleLogin = () => {
         window.location.href = 'https://localhost:7183/api/auth/login';
@@ -44,4 +44,4 @@ const Navbar = ({ user, logoutCallback}) => {
     )
 }
 
-export default Navbar;
+export default NavigationBar;
