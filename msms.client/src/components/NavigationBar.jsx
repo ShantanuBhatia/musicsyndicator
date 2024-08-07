@@ -6,7 +6,7 @@ const NavigationBar = ({ user, logoutCallback}) => {
     
 
     const handleLogin = () => {
-        window.location.href = `${import.meta.env.REACT_APP_API_URL || "https://localhost:7183"}/api/auth/login`;
+        window.location.href = `${import.meta.env.VITE_LINEUP_API_BASE || "https://localhost:7183"}/api/auth/login`;
     };
 
     return (

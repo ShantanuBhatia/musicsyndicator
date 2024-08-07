@@ -2,7 +2,7 @@ import axios from 'axios';
 
 
 const api = axios.create({
-    baseURL: import.meta.env.REACT_APP_API_URL || 'https://localhost:5173',
+    baseURL: import.meta.env.VITE_LINEUP_API_BASE || 'https://localhost:5173',
     withCredentials: true,
 });
 
@@ -10,7 +10,7 @@ api.interceptors.response.use(
     (response) => response,
     (error) => {
         if (error.response && error.response.status === 401) {
-            window.location.href = `${import.meta.env.REACT_APP_API_URL || "https://localhost:7183"}/api/auth/login`;
+            window.location.href = `${import.meta.env.VITE_LINEUP_API_BASE || "https://localhost:7183"}/api/auth/login`;
         }
         return Promise.reject(error);
     }
