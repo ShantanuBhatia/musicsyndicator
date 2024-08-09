@@ -35,7 +35,7 @@ const handleApiError = (error) => {
 export const authApi = {
     logout: async () => {
         try {
-            const response = axios.post('/api/auth/logout', {}, { withCredentials: true });
+            const response = await api.post('/api/auth/logout', {}, { withCredentials: true });
             return response.data;
         } catch (error) {
             throw handleApiError(error);
