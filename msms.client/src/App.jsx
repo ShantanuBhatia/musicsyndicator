@@ -6,6 +6,7 @@ import Home from './components/Home';
 import Search from './components/Search';
 import CreateNewList from './components/CreateNewList';
 import NotFound from './components/NotFound';
+import MobileDetection from './hooks/MobileDetection';
 
 const App = () => { 
 
@@ -20,14 +21,15 @@ const App = () => {
 
 const AppContent = () => {
     const { user, handleLogout, loading } = useUser();
-    
+
+    const isMobile = MobileDetection();
 
     if (loading) {
         return (<div className="bg-[#111813] dark group/design-root"></div>);
     }
     return (
         <div className="flex flex-col size-full min-h-svh">
-            <NavigationBar user={user} logoutCallback={handleLogout} />
+            <NavigationBar user={user} logoutCallback={handleLogout} isMobile={isMobile} />
             <div
                 className="relative flex flex-1 flex-col bg-[#111813] dark group/design-root "
                 style={{
@@ -36,11 +38,11 @@ const AppContent = () => {
                 }}
             >
                 <Routes>
-                    <Route exact path="/" element={<Home user={user} />} />
-                    <Route path="/search" element={<Search user={user} />} />
+                    <Route exact path="/" element={<Home user={user} isMobile={isMobile} />} />
+                    <Route path="/search" element={<Search user={user} isMobile={isMobile} />} />
                     <Route path="/create" element={
                         <PrivateRoute>
-                            <CreateNewList user={user} />
+                            <CreateNewList user={user} isMobile={isMobile} />
                         </PrivateRoute>
                     } />
                     <Route path='*' element={<NotFound />} />

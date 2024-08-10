@@ -3,9 +3,9 @@ const ArtistPreview = ({ artist, isSelected, onClick }) => {
     return (
         <div
             
-            className="flex flex-row py-1 gap-x-4 pr-4">
+            className="flex flex-row py-1 gap-x-4">
             {artist.images[0] ? <img
-                className="aspect-square rounded-lg size-14"
+                className="aspect-square size-14"
                 src={artist.images[0]?.url}
                 alt={artist.name}
             /> : 

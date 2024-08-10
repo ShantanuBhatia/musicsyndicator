@@ -4,7 +4,7 @@ import { authApi } from '../services/apiService';
 
 const UserContext = createContext();
 
-export function UserProvider({ children }) {
+export const UserProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
 
@@ -21,6 +21,10 @@ export function UserProvider({ children }) {
                 }
             } catch (error) {
                 console.error('Error fetching user:', error);
+                setUser({
+                    isAuthenticated: false,
+                    name: null
+                });
             } finally {
                 if (!ignore) setLoading(false);
             }
@@ -38,9 +42,10 @@ export function UserProvider({ children }) {
     const handleLogout = async () => {
         try {
             await authApi.logout();
-            setUser({ isAuthenticated: false });
         } catch (error) {
             console.error('Error logging out:', error);
+        } finally {
+            setUser({ isAuthenticated: false });
         }
     };
 
