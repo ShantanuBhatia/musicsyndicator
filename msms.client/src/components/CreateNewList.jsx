@@ -93,7 +93,7 @@ const CreateNewList = ({ user, isMobile }) => {
                         disabled={isSubmitting}
                         onClick={createArtistList}
                     >
-                        Save Lineup
+                    {isSubmitting ? "Saving..." : "Save Lineup"}
                     </button>
                 </div>
                 {isSearchOpen && (
@@ -127,7 +127,7 @@ const CreateNewList = ({ user, isMobile }) => {
                             disabled={isSubmitting}
                             onClick={createArtistList}
                         >
-                            Save List
+                        {isSubmitting ? "Saving..." : "Save Lineup"}
                         </button>
                     </div>
                     {error && <p className="text-red-500">{error}</p>}
