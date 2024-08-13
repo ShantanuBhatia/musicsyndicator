@@ -27,7 +27,7 @@ const exportingConfig = {
             }
         },
         port: 5173,
-        
+
     }
 }
 

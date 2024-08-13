@@ -1,49 +1,48 @@
 import { Link } from 'react-router-dom';
 
 
-const NavigationBar = ({ user, logoutCallback}) => {
+const NavigationBar = ({ user, logoutCallback, isMobile}) => {
 
     
 
     const handleLogin = () => {
         window.location.href = `${import.meta.env.VITE_LINEUP_API_BASE || "https://localhost:7183"}/api/auth/login`;
     };
-
+        
     return (
-        <div className="sticky top-0 z-50 bg-[#111813] dark group/design-root "
+        <nav className="sticky top-0 z-50 bg-[#111813] border-b border-[#29382e]"
             style={{
                 fontFamily: ["Plus Jakarta Sans", "Noto Sans", "sans-serif"]
             }} >
-            <div className="layout-container flex h-full grow flex-col">
-                <header className="flex items-center justify-between whitespace-nowrap border-b border-solid border-b-[#29382e] px-10 py-3">
-                    <div className="flex items-center gap-4">
-                        <Link to="/">
-                            <h2 className="text-white cursor-pointer text-lg font-bold leading-tight hover:text-gray-400 tracking-[-0.015em]">{user.isAuthenticated ? `${user.name}'s Lineups` : "Lineup"}</h2>
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <header className={`flex justify-between items-center h-16`}>
+                    <div className="flex-shrink-0">
+                        <Link to="/" className={`text-white font-bold hover:text-gray-200 ${isMobile ? 'text-xl' : 'text-lg'}`} >
+                            { user.isAuthenticated ? (isMobile ? `Hey, ${user.name}` : `${user.name}'s Lineups`) : "Lineup"}
                         </Link>
                     </div>
-                    <div className="flex flex-1 justify-end gap-8">
-                        <div className="flex gap-2">
+                    <div>
+                        
                             {user?.isAuthenticated ?
                                 <button
-                                className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 px-4 bg-[#19cc58] text-[#111813] text-sm font-bold leading-normal tracking-[0.015em]"
+                                    className={`bg-[#19cc58] text-[#111813] rounded-full font-bold hover:bg-[#16b850] transition duration-300 px-4 py-2 text-sm`}
                                     onClick={logoutCallback}
                                 >
-                                    <span className="truncate">Log Out</span>
+                                    <span className="truncate">Sign Out</span>
                                 </button> 
                                 :
                                 <button
-                                    className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 px-4 bg-[#19cc58] text-[#111813] text-sm font-bold leading-normal tracking-[0.015em]"
+                                className={`bg-[#19cc58] text-[#111813] rounded-full font-bold hover:bg-[#16b850] transition duration-300  px-4 py-2 text-sm`}
                                     onClick={handleLogin}
                                 >
-                                    <span className="truncate">Log In with Spotify</span>
+                                    Connect to Spotify
                                 </button> 
                             }
-                            
-                        </div>
+
                     </div>
                 </header>
             </div>
-        </div>
+        </nav>
     )
 }
 
