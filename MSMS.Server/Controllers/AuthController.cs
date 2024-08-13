@@ -21,7 +21,7 @@ namespace MSMS.Server.Controllers
         [HttpGet("login")]
         public IActionResult Login()
         {
-            return Challenge(new AuthenticationProperties { RedirectUri = "/" }, "Spotify");
+            return Challenge(new AuthenticationProperties { RedirectUri = "https://trylineup.tech" }, "Spotify");
         }
 
         [HttpPost("logout")]
