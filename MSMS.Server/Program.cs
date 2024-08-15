@@ -1,9 +1,6 @@
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication;
 using AspNet.Security.OAuth.Spotify;
 using Microsoft.EntityFrameworkCore;
-using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 
 using MSMS.Server.Data;
 using MSMS.Server.Interfaces;
@@ -11,11 +8,8 @@ using MSMS.Server.Repository;
 using MSMS.Server.Helpers;
 using SpotifyAPI.Web;
 using MSMS.Server.Infrastructure;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Options;
-using System.Configuration;
 using Microsoft.AspNetCore.HttpOverrides;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -74,7 +68,15 @@ builder.Services.AddAuthentication(options =>
     options.Scope.Add("user-read-private");
     options.Scope.Add("user-read-email");
     options.Scope.Add("playlist-modify-public");
-    options.Scope.Add("playlist-modify-private"); 
+    options.Scope.Add("playlist-modify-private");
+    // Handle unauthorized users during Development Mode release
+    options.Events.OnRemoteFailure = context =>
+    {
+        context.Response.Redirect("/register-interest");
+        context.HandleResponse();
+        return Task.CompletedTask;
+    };
+
 })
 .AddScheme<SpotifyAuthenticationOptions, CustomSpotifyHandler>("CustomSpotify", options => {
     options.ClientId = builder.Configuration["Spotify:ClientId"];

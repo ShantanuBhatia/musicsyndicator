@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Route, Routes} from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import './App.css';
 import { UserProvider, useUser, PrivateRoute } from './hooks/UserContext'
 import NavigationBar from './components/NavigationBar';
@@ -38,7 +38,8 @@ const AppContent = () => {
                 }}
             >
                 <Routes>
-                    <Route exact path="/" element={<Home user={user} isMobile={isMobile} />} />
+                    <Route exact path="/" element={<Home user={user} isMobile={isMobile} sim={true} />} />
+                    <Route path="/register-interest" element={<Navigate to="/" replace state={{ showInterestModal: true }} />} />
                     <Route path="/search" element={<Search user={user} isMobile={isMobile} />} />
                     <Route path="/create" element={
                         <PrivateRoute>
