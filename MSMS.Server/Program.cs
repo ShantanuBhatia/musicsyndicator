@@ -87,6 +87,13 @@ builder.Services.AddAuthentication(options =>
     options.Scope.Add("user-read-email");
     options.Scope.Add("playlist-modify-public");
     options.Scope.Add("playlist-modify-private");
+    // Handle unauthorized users during Development Mode release
+    options.Events.OnRemoteFailure = context =>
+    {
+        context.Response.Redirect("/register-interest");
+        context.HandleResponse();
+        return Task.CompletedTask;
+    };
 });
 
 builder.Services.AddAuthorization(options =>
